@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<head>
+	<title>DragTest</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<link href="dragDemo.css" rel="stylesheet"  />
+	<script src="../../../xx.base.js"></script>
+	<script src="../XXDrag.js"></script>
+</head>
+<body>
+	<div class="drop-target column">
+		<div class="wrapper dragable">
+			<div class="header-bar drag-parent">title1</div>
+			<div class="content dragable drop-target">test content
+				<div class="dragable drag-parent" style="height:20px; border:2px solid red; position: relative">aaaaaaaaaasasasqwqwqwq</div>
+			</div>
+		</div>
+		<div class="wrapper dragable">
+			<div class="header-bar drag-parent">title2</div>
+			<div class="content">test content</div>
+		</div>
+	</div>
+	<div class="drop-target column">
+		<div class="wrapper dragable">
+			<div class="header-bar drag-parent">title3</div>
+			<div class="content">test content</div>
+		</div>
+		<div class="wrapper dragable">
+			<div class="header-bar drag-parent">title4</div>
+			<div class="content">test content</div>
+		</div>
+	</div>
+	<div class="drop-target column">
+		<div class="wrapper dragable">
+			<div class="header-bar drag-parent">title5</div>
+			<div class="content">test content</div>
+		</div>
+	</div>
+	<div class="menu-wrapper">
+		<ul id="menu-toolbar">
+			<li><a href="#" class="start-drag">开始拖动</a></li>
+			<li><a href="#" class="end-drag">结束拖动</a></li>
+			<li><a href="#" class="show-domTree">显示DOM树</a></li>
+			<li><a href="#" class="show-coord">显示坐标高宽</a></li>
+		</ul>
+	</div>
+	
+	<script>
+	XX.EventUtil.addEvent(document, 'click', function(evt){
+		evt = evt || window.event;
+		var tgt = evt.target || evt.srcElement;
+		
+		switch(tgt.className){
+			case "start-drag":
+				XX.DragDrop.enableDrag(true);
+				XX.DragDrop.enableDrop();
+				XX.DragDrop.enableOverStyle();
+				return false;
+			
+			case "end-drag":
+				XX.DragDrop.disable();
+				return false;
+				
+			case "show-domTree":
+				XX.Debug.enable();
+				XX.Debug.listenEvent('click');
+				break;
+				
+			case "show-coord":
+				break;
+		}
+	});
+	</script>
+</body>
+</html>

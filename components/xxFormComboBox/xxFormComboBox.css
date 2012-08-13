@@ -1,0 +1,56 @@
+/* CSS Document */
+.xx-combox-ctn{
+  margin:0;
+  padding:0;
+  width:180px;
+  position:relative;
+  z-index:9999;
+}
+
+.xx-combox-input{
+  margin:0;
+  padding:0;
+  height:24px;
+  width:153px;	
+  border: solid 1px #71E0FE;	
+}
+
+.xx-combox-btn{
+  position:absolute;
+  right:0;
+  _right:-3px;
+  margin:0;
+  padding:0;
+  +top:1px;
+  _top:1px;
+  outline: 1px medium #71E0FE;
+  
+}
+
+.xx-combox-itmCtn{
+  margin:0;
+  padding:0;
+  border: solid 1px #71E0FE;
+  border-top:none;
+  width:100%;
+  cursor:pointer;
+  position:absolute;
+  left:0;
+ +top:27px;
+  _top:27px;
+  z-index:9999;	
+  background-color:#FFF;
+  max-height:150px;
+  _height:expression(this.scrollHeight > this.maxHeight? this.maxHeight+"px" : "auto");
+  overflow:auto;
+  overflow-x:hidden;
+  display:none; 
+}
+
+.xx-combox-item{
+	margin:0;
+    padding:0;
+	padding-left:2px;
+	height:24px;
+	width: 100%;	
+}

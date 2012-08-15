@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8" />
+		<title>
+			xxEvent测试
+		</title>
+	</head>
+	<body>
+		<div id="main">
+			<fieldset>
+				<legend>
+					on-fire-off
+				</legend>
+				<label>Events to be added:
+					<input id="evts" value="fuck fuck1 fuck2"/>
+				</label>
+				<label>Scope:
+					<input id="scope" value="$('main')"/>
+				</label>
+				<label>data to be added when on:
+					<input id="ondata" value="'onData'"/>
+				</label>
+				<label>data to be added when fired:
+					<input id="firedata" value="['fireData1', 'fireData2']"/>
+				</label>
+				<br />
+				<br />
+				<label>code to run:
+					<textarea id="code">
+					console.log(type);
+					console.log(this.id);
+					</textarea>
+				</label>
+				<input type="button" id="on" value="on" />
+				<label>Events to be fired:
+					<input type="text" id="fireevts" value="fuck"/>
+				</label>
+				<input type="button" id="fire" value="fire" />
+				<label>Events to be off:
+					<input type="text" id="offevts" value="fuck"/>
+				</label>
+				<input type="button" id="off" value="off" />
+			</fieldset>
+		</div>
+		<script type="text/javascript" src="../xxEvent.js"></script>
+		<script type="text/javascript">
+			var $ = function(id){
+				return document.getElementById(id);
+			}
+			var Event = new XX.Event();
+			
+			$('on').onclick = function(){
+				Event.on($('evts').value, new Function('type', $('code').value), 
+					eval($('scope').value), eval($('ondata').value));
+			}
+			
+			$('fire').onclick = function(){
+				Event.fire($('fireevts').value, eval($('firedata').value));
+			}
+			
+			$('off').onclick = function(){
+				if($('offevts').value){
+					Event.off($('offevts').value);
+				} else {
+					Event.off();
+				}
+				
+			}
+		</script>
+	</body>
+</html>

@@ -19,7 +19,7 @@ void function(){
 	
 	XX.Event = function(){
 		this._handlers = {};
-		this._all = null;
+		this._suspend = false;
 	};
 	
 	/*
@@ -37,8 +37,6 @@ void function(){
 				data : data || []
 			});
 		}, this);
-
-		return this;
 	}; 
 
 	
@@ -59,7 +57,7 @@ void function(){
 	 * */
 	var _onkvp = function(kvp){
 		for(var k in kvp){
-			_onstr(k, kvp[k].callback, {
+			_onstr.call(this, k, kvp[k].callback, {
 				scope: kvp[k].scope,
 				data: kvp[k].data
 			})
@@ -71,28 +69,28 @@ void function(){
 	 * evtList：为数组，callback为回调函数，scope为callback的this上下文，data为要传入的参数数组
 	 * 该函数能够将一系列关联事件合并为一个事件，只有当evts中的所有事件都触发时，callback才会被调用
 	 * */
-	var _onall = function(evtList, callback, scope, data){
+	var _onlist = function(evtList, callback, scope, data){
 		var _events = {},
 			_data = (data && data.slice(0)) || [];
-		for(var i = evtList.length - 1; i > -1; --i){
-			var evts = evtList.split(' ');
-			for(var j = evts.length - 1; j > -1; --j){
-				_events[evts[i]] = false;
-				_onstr(evts[i], _wrapper, null, [evts[i]]);
-			}
-		}
+		
+		_each(evtList, function(evts){
+			_each(evts.split(' '), function(evt){
+				_events[evt] = false;
+				_onstr.call(this, evt, _wrapper, null, [evt]);
+			}, this);
+		}, this);
 		
 		function _wrapper(evt){
 			_events[evt] = true;
 			_data = _data.concat(Array.prototype.slice.call(arguments, 1));
-			//若事件	
+			//若事件未全部触发，则返回	
 			for(var k in _events){
 				if(!_events[k]){
 					return;
 				}
 			}
 			
-			callback.apply(options.scope || null, _data);
+			callback.apply(scope || null, _data);
 		}
 		
 		_wrapper.__fn = callback;
@@ -101,26 +99,62 @@ void function(){
 	/*
 	 *在事件每发生count次后，触发callback
 	 * */
-	var _count = function(count, evts, callback, scope, data){
+	var _circle = function(count, evts, callback, scope, data){
 		if(count < 0){
 			return;
 		}
-		var self = this,
-			_count = count;
-		var _originData = (data && data.slice(0)) || [],
-			_data = _originData.slice(0);
+		var _count 		= count,
+		 	_originData = (data && data.slice(0)) || [],
+			_data 		= _originData.slice(0);
+		
+			
 		var _wrapper = function(){
 			--_count;
-			_data.concat(Array.prototype.slice.call(arguments, 0));
+			_data.concat(slice.call(arguments, 0));
 			if(_count === 0){
+				//重置计数器
 				_count = count;
 				callback.apply(scope, _data);
+				//重置传入参数
 				_data =  _originData.slice(0);
 			}
 		};
 		
 		_wrapper.__fn = callback;
-		_onstr(evts, _wrapper, scope);
+		_onstr.call(this, evts, _wrapper);
+		return this;
+	};
+	
+	
+	/*
+	 *在事件每发生count次后，触发一次callback，仅触发一次
+	 * */
+	var _after = function(count, evts, callback, scope, data){
+		if(count < 0){
+			return;
+		}
+		var _originData = (data && data.slice(0)) || [],
+			_data 		= _originData.slice(0);
+		
+			
+		var _wrapper = function(){
+			--count;
+			_data.concat(slice.call(arguments, 0));
+			if(count === 0){
+				callback.apply(scope, _data);
+				if(evts instanceof Array){
+					_each(evts, function(evt){
+						this.off(evt, _wrapper);
+					}, this);
+				} else {
+					this.off(evts, _wrapper);
+				}
+			}
+		};
+		
+		_wrapper.__fn = callback;
+		_onstr.call(this, evts, _wrapper, this);
+		return this;
 	};
 	
 	/*
@@ -136,9 +170,6 @@ void function(){
 			data = slice.call(arguments, 1);
 			all =  handlers['all'];
 			
-		if(!evts){
-			this.fireAll(data);
-		}
 		_each(evts.split(' '), function(evt){
 			handlers[evt] && _each(handlers[evt], function(handler){
 				handler.fn.apply(handler.scope, [evt].concat(handler.data).concat(data));
@@ -190,13 +221,44 @@ void function(){
 				});
 			}
 		}
+		
+		return this;
 	};
 	
 	XX.Event.prototype = {
 		constructor: XX.Event,
-		on:_onstr,
+		on:function(evts, callback, scope, data){
+			if(typeof evts === 'string'){
+				_onstr.call(this, evts, callback, scope, data);
+			} else if( evts instanceof Array){
+				_onlist.call(this, evts, callback, scope, data);
+			} else {
+				_onkvp.call(this, evts);
+			}
+			
+			return this;
+		},
 		fire:_fire,
 		fireAll:_fireAll,
-		off: _off
+		circle: _circle,
+		after: _after,
+		off: _off,
+		all: function(callback, scope, data){
+			return this.on('all', callback, scope, data);
+		},
+		once: function(evts, callback, scope, data){
+			return this.after(1, evts, callback, scope, data);
+		},
+		suspend: function(){
+			this._suspend = true;
+			return this;
+		},
+		resume: function(){
+			this._suspend = false;
+			return this;
+		},
+		isSuspend: function(){
+			return this._suspend;
+		}
 	}
 }();

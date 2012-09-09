@@ -8,78 +8,90 @@ KISSY.add('skip', function(S){
 		
 		var defaultConfig = {
 			step: 1,
-			direct:'r'
+			direct:'x',
+			startIndex: 0
 		};
 		
 		this._elem = el;
 		this._configs = configs = S.merge(defaultConfig, configs);
 		this._items = configs.itemType? D.query(configs.itemType) : D.children(el);
-		this._current = 0;
-		this._end = this._items.length;
+		this._current = configs.startIndex;
+		configs.endIndex = configs.endIndex || this._items.length - 1;
 		
 		el.innerHTML += el.innerHTML;
 		
 		switch(configs.direct){
-			case 'r':
+			case 'x':
 				this._scrollProp = 'scrollLeft';
 				this._sizeProp = 'outerWidth';
-				this._delta = el.scrollWidth - el.offsetWidth;
-				this._factor = 1;
+				this._size = el.scrollWidth;
 				break;
-			case 'l':
-				this._scrollProp = 'scrollLeft';
-				this._sizeProp = 'outerWidth';
-				this._delta = el.scrollWidth - el.offsetWidth;
-				this._factor = -1;
-				break;
-			case 't':
+			case 'y':
 				this._scrollProp = 'scrollTop';
 				this._sizeProp = 'outerHeight';
-				this._delta = el.scrollHeight - el.offsetHeight;
-				this._factor = -1;
+				this._size = el.scrollHeight;
 				break;
-			case 'b':
-				this._scrollProp = 'scrollTop';
-				this._sizeProp = 'outerHeight';
-				this._delta = el.scrollHeight - el.offsetHeight;
-				this._factor = 1;
-				break;
-				
 		}
 		
 		el.style.whiteSpace = 'nowrap';
 	};
 	
-	function _calSkipLength(current, end, step, prop, items){
-		var i, length, el;
-		i = length = 0;
-		while(i < step){
-			el = items[++current];
-			el && (length += S[prop](el)); 
-		}
-		
-		return length;
+	function _getLength(index, prop, items){
+		return D[prop](items[index], true);
 	}
+	
 	
 	Skip.prototype = {
 		constructor: Skip,
-		next: function(){
+		go: function(num){
+			num = num || 1;
+			var factor = num < 0 ? -1 : 1;
+			num = Math.abs(num);
+			
 			var configs 	= this._configs,
 				el 			= this._elem,
 				sizeProp 	= this._sizeProp,
 				scrollProp  = this._scrollProp,
-				step 		= configs.step,
+				size       = this._size,
+				step 		= configs.step * num,
+				i           = 0,
+				scroll      = el[scrollProp],
+				end         = configs.endIndex + 1,
 				offset;
 				
-			if(end <= this._current + step){
-				step = (this._current + step) % end;
-				this._current = 0;
+			while(i < step){
+				this._current = (++this._current) % end;
+				offset = _getLength(this._current, sizeProp, this._items) * factor;
+				if(factor === 1){
+					if(scroll  <  size){
+						scroll += offset;
+					} else {
+						scroll = 0;
+					}
+				} else {
+					if(scroll  >  0){
+						scroll += offset;
+					} else {
+						scroll = 0;
+					}
+				}
+				
 			}
 			
-			offset = _calSkipLength(this._current, this._end, step, this._items);
+			el[scrollProp] = scroll;	
 			
-				
-			
+		},
+		next: function(){
+			this.go();		
+		},
+		prev: function(){
+			this.go(-1);
+		},
+		destroy: function(){
+			this._items = null;
+			this._elem = null;
 		}
 	}
+	
+	return Skip;
 });

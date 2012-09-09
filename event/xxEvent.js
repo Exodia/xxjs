@@ -2,7 +2,7 @@ void function(){
 	
 	function _each(arr, fn, scope){
 		for(var i = 0, len = arr.length; i < len; ++i){
-			fn.apply(scope || arr, [arr[i], i, arr]);
+			arr[i] && fn.apply(scope || arr, [arr[i], i, arr]);
 		}
 	}
 	

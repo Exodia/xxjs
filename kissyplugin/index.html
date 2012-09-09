@@ -1,0 +1,558 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="GBK"/>
+    <link rel="stylesheet" href="http://a.tbcdn.cn/??p/global/1.0/global-min.css,p/global/1.0/header-min.css?t=20120829.css"/>
+    <script src="http://a.tbcdn.cn/??s/kissy/1.2.0/kissy-min.js,p/global/1.0/global-min.js?t=20120829.js"></script>
+
+    <link rel="stylesheet" href="assets/1.0/css/global.css">
+    <link rel="stylesheet" href="assets/1.0/css/index.css">
+    <link rel="stylesheet" href="assets/1.0/css/waterfall.css">
+    <link rel="stylesheet" href="assets/1.0/css/pagination.css">
+    <link rel="stylesheet" href="assets/1.0/css/hot-list.css">
+    <link rel="stylesheet" href="assets/1.0/css/gotop.css">
+    <title>爱淘-淘宝网</title>
+
+    <style type="text/css">
+        .tms-module-hd {
+            height: 30px;
+            line-height: 30px;
+            margin-bottom: 2px;
+            position: relative;
+            top: 40px;
+            left: 0px;
+            border: #98a8bb 1px dashed;
+            overflow: hidden;
+            z-index: 100;
+            background: url("http://assets.taobaocdn.com/app/tms/img/trans_bg.png") repeat-x scroll transparent;
+        }
+
+        .tms-col-hd .actions li a, .tms-module-hd .actions li a {
+            -moz-border-radius: 4px;
+            background: url("http://assets.taobaocdn.com/app/tms/img/button_bg.png") repeat-x scroll 0 0 #E2E9F3;
+            border: 1px solid #A6B6D2;
+            color: #333333;
+            display: block;
+            font-weight: normal;
+            height: 20px;
+            line-height: 18px;
+            margin-top: 50px;
+            padding: 0 12px;
+        }
+    </style>
+</head>
+
+<body class="aitao-1">
+<div id="site-nav">
+    <div id="site-nav-bd">
+        <div class="sitenav-mobile">
+            <a href=" http://www.taobao.com/m?spm=1.1000386.176505.4&amp;TBG=146112.176505.4">手机版</a>
+        </div>
+        <p class="login-info">
+            <script>TB.Global.writeLoginInfo({"memberServer":"http://member1.taobao.com/", "outmemServer":"", "loginServer":"", redirectUrl:"", logoutUrl:""});</script>
+        </p>
+        <ul class="quick-menu">
+            <li class="home"><a href="http://www.taobao.com/" target="_top">淘宝网首页</a></li>
+            <li class="menu-item">
+                <div class="menu">
+                    <a class="menu-hd" style="width:36px;" href="http://love.taobao.com/?taobao_from=1" target="_top"
+                       rel="nofollow">我要买<b></b></a>
+
+                    <div class="menu-bd" style="width:68px;height:94px;line-height:1.7;">
+                        <div class="menu-bd-panel" style="padding:8px 10px;">
+                            <div>
+                                <a href="http://love.taobao.com/guang/index.htm?taobao_from=3" target="_top"
+                                   rel="nofollow">发现宝贝</a>
+                                <a href="http://love.taobao.com/album/index.htm?taobao_from=4" target="_top"
+                                   rel="nofollow">专辑</a><br/>
+                                <a href="http://love.taobao.com/toukui/index.htm?taobao_from=5" target="_top"
+                                   rel="nofollow">寻找同好</a>
+                                <a href="http://list.taobao.com/browse/cat-0.htm?taobao_from=6" target="_top"
+                                   rel="nofollow">商品分类</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </li>
+            <li class="mytaobao menu-item">
+                <div class="menu">
+                    <a class="menu-hd" href="http://i.taobao.com/my_taobao.htm" target="_top" rel="nofollow">我的淘宝<b></b></a>
+
+                    <div class="menu-bd" style="height: 94px;">
+                        <div class="menu-bd-panel" id="myTaobaoPanel">
+                            <div>
+                                <a href="http://trade.taobao.com/trade/itemlist/list_bought_items.htm" target="_top"
+                                   rel="nofollow">已买到的宝贝</a>
+                            </div>
+                            <div>
+                                <a href="http://jianghu.taobao.com/admin/invite/invite_friend.htm" target="_top"
+                                   rel="nofollow">我的好友</a>
+                            </div>
+                            <div>
+                                <a href="http://i.taobao.com/my_taobao.htm" target="_top" rel="nofollow">最新动态</a>
+                            </div>
+                            <div>
+                                <a href="http://yingyong.taobao.com?scm=1012.8.8.4" target="_top"
+                                   rel="nofollow">买家应用中心</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </li>
+            <style>
+                #site-nav .seller-center .menu-hd {
+                    width: 48px;
+                }
+
+                #site-nav .seller-center .menu-bd {
+                    width: 94px;
+                    line-height: 1.7;
+                }
+
+                #site-nav .seller-center .menu-bd-panel {
+                    padding: 8px 10px;
+                }
+            </style>
+            <li class="seller-center menu-item">
+                <div class="menu">
+                    <a class="menu-hd" href="http://mai.taobao.com/seller_admin.htm" target="_top"
+                       rel="nofollow">卖家中心<b></b></a>
+
+                    <div class="menu-bd">
+                        <div class="menu-bd-panel">
+                            <div>
+                                <a href="http://trade.taobao.com/trade/itemlist/list_sold_items.htm" target="_top"
+                                   rel="nofollow">已卖出的宝贝</a>
+                                <a href="http://sell.taobao.com/auction/goods/goods_on_sale.htm" target="_top"
+                                   rel="nofollow">出售中的宝贝</a>
+                                <a href="http://fuwu.taobao.com/?tracelog=tbdd" target="_top" rel="nofollow">卖家服务市场</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </li>
+            <li class="service">
+                <a href="http://service.taobao.com/support/main/service_center.htm" target="_top"
+                   rel="nofollow">服务中心</a>
+            </li>
+            <li class="cart">
+                <a href="http://cart.taobao.com/my_cart.htm" target="_top" rel="nofollow"><s></s>购物车</a>
+                <b class="leftline"></b>
+                <b class="rightline"></b>
+            </li>
+            <li class="favorite menu-item">
+                <div class="menu">
+                    <a class="menu-hd" style="width:36px;"
+                       href="http://favorite.taobao.com/collect_list-1-.htm?scjjc=c1" target="_top"
+                       rel="nofollow">收藏夹<b></b></a>
+
+                    <div class="menu-bd" style="width:82px;height:73px;line-height:1.7;">
+                        <div class="menu-bd-panel" style="padding:8px 10px;">
+                            <div>
+                                <a href="http://favorite.taobao.com/collect_list.htm?itemtype=1" target="_top"
+                                   rel="nofollow">收藏的宝贝</a>
+                                <a href="http://favorite.taobao.com/collect_list.htm?itemtype=0" target="_top"
+                                   rel="nofollow">收藏的店铺</a>
+                                <a href="http://favorite.taobao.com/hot_collect_list.htm?entrance=home" target="_top"
+                                   rel="nofollow">热门收藏</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </li>
+            <li class="services menu-item last">
+                <div id="J_Service" class="menu">
+                    <a class="menu-hd" href="http://www.taobao.com/sitemap.php?id=sitemap2"
+                       target="_top">网站导航<b></b></a>
+
+                    <div id="J_ServicesContainer" class="menu-bd"
+                         style="width:202px;width:210px9;_width:202px;height:337px;"></div>
+                </div>
+            </li>
+        </ul>
+    </div>
+</div>
+
+<script>
+    TB.Global.init();
+</script>
+
+<div id="page" class="aitao-page aitao-index-page">
+    <div id="aitao">
+        <div id="itao-header" class="aitao-header">
+            <a class="logo" href="index.html" title="爱淘 - 因为懂我，所以爱淘！"><h1>爱淘 - 因为懂我，所以爱淘！</h1></a>
+            <ul class="aitao-nav">
+                <li class="active">
+                    <h2 class="aitao-nav-near"><a href="index.html">周边</a></h2>
+
+                    <p class="intro">周围的人在买什么</p>
+                </li>
+                <li>
+                    <h2 class="aitao-nav-cut"><a href="cut-list.html">优惠</a></h2>
+
+                    <p class="intro">收藏夹购物车中的宝贝优惠</p>
+                </li>
+                <li>
+                    <h2 class="aitao-nav-new nobg"><a href="new-goods.html">新品</a></h2>
+
+                    <p class="intro">收藏店铺的新上架宝贝</p>
+                </li>
+            </ul>
+        </div>
+
+        <div id="itao-wapper" class="aitao-wapper">
+            <div class="aitao-contain">
+                <div class="J_Aitao-main aitao-main aitao-index-main right">
+                    <div class="area-info">
+                        <p class="hd"><a href="#" class="name">浙江省杭州市西湖区华星路99号创业大厦周边的人</a><span class="J_Latest">最近购买</span>的宝贝
+                        </p>
+
+                        <p class="bd">该地最近一周的消费总额：<span class="num">48789</span>人均消费：<span class="num">798</span></p>
+                        <div class="advanced">
+                            <span>显示</span>
+                            <label for="buy" hidefocus="true"><input type="checkbox" name="xxx" id="buy">已购的</label>
+                            <label for="fav" hidefocus="true"><input type="checkbox" name="xxxx" id="fav">收藏的</label>
+                        </div>
+                        <!--<a href="#" class="rss">订阅该地址</a>-->
+                    </div>
+                    <div class="choices">                       
+                        <div class="basic">
+                            <ul class="btns-wrap" id="J_FirstCategory" data-menu-config="{trigger:'li',content:'.tips-wrap'}">
+                                <li><a href="#" hidefocus="true" class="active"><span>全部<i></i></span></a></li>
+                                <li><a href="#" hidefocus="true"><span>女装<i></i></span></a></li>
+                                <li><a href="#" hidefocus="true"><span>美妆饰品<i></i></span></a></li>
+                                <li><a href="#" hidefocus="true"><span>鞋类箱包<i></i></span></a></li>
+                                <li><a href="#" hidefocus="true"><span>家居百货<i></i></span></a></li>
+                                <li><a href="#" hidefocus="true"><span>母婴<i></i></span></a></li>
+                                <li><a href="#" hidefocus="true"><span>男装<i></i></span></a></li>
+                                <li><a href="#" hidefocus="true"><span>运动户外<i></i></span></a></li>
+                                <li><a href="#" hidefocus="true"><span>数码家电<i></i></span></a></li>
+                               
+                            </ul>
+                            <div class="category-wrap" id="J_SecondCategory">
+                            	<span class="handler-wrap">
+                            		<a id="J_PrevCat" class="category-prev-handler" title="上一个"></a>
+                            		<a id="J_NextCat" class="category-next-handler" title="下一个"></a>
+                          		</span>
+                           	 	<ul class="tips-wrap test">
+                               	 	<li data-category="['长裤01','中裤01','短裤01']"><a href="#" hidefocus="true"><span>鞋包配饰(6)</span></a></li>
+                                	<li data-category="['长裤02','中裤02','短裤02']"><a href="#" hidefocus="true"><span>美食零嘴(6)</span></a></li>
+                               		<li data-category="['长裤03','中裤03','短裤03']"><a href="#" hidefocus="true"><span>宠物花鸟(2)</span></a></li>
+                                	<li data-category="['长裤04','中裤04','短裤04']"><a href="#" hidefocus="true"><span>运动户外(6)</span></a></li>
+                                	<li data-category="['长裤05','中裤05','短裤05']"><a href="#" hidefocus="true"><span>数码(6)</span></a></li>
+                                	<li data-category="['长裤06','中裤06','短裤06']"><a href="#" hidefocus="true"><span>电子配件(6)</span></a></li>
+                                	<li data-category="['长裤04','中裤04','短裤04']"><a href="#" hidefocus="true"><span>运动户外(6)</span></a></li>
+                                	<li data-category="['长裤05','中裤05','短裤05']"><a href="#" hidefocus="true"><span>数码(6)</span></a></li>
+                                	<li data-category="['长裤05','中裤05','短裤05']"><a href="#" hidefocus="true"><span>数码(6)</span></a></li>
+                                	<li data-category="['长裤05','中裤05','短裤05']"><a href="#" hidefocus="true"><span>数码(6)</span></a></li>
+                                	<li data-category="['长裤05','中裤05','短裤05']"><a href="#" hidefocus="true"><span>数码(6)</span></a></li>
+                            	</ul>
+                            	<ul class="tips-wrap none">
+                               	 	<li data-category="['长裤11','中裤01','短裤01']"><a href="#" hidefocus="true"><span>连衣裙(6)</span></a></li>
+                                	<li data-category="['长裤12','中裤01','短裤01']"><a href="#" hidefocus="true"><span>T恤(6)</span></a></li>
+                               		<li data-category="['长裤13','中裤01','短裤01']"><a href="#" hidefocus="true"><span>风衣(2)</span></a></li>
+                                	<li data-category="['长裤14','中裤01','短裤01']"><a href="#" hidefocus="true"><span>衬衫(6)</span></a></li>
+                                	<li data-category="['长裤15','中裤01','短裤01']"><a href="#" hidefocus="true"><span>西装(6)</span></a></li>
+                                	<li data-category="['长裤16','中裤01','短裤01']"><a href="#" hidefocus="true"><span>外套(6)</span></a></li>
+                            	</ul>
+                            	<ul class="tips-wrap none">
+                               	 	<li data-category="['长裤21','中裤01','短裤01']"><a href="#" hidefocus="true"><span>测试类目1(6)</span></a></li>
+                                	<li data-category="['长裤22','中裤01','短裤01']"><a href="#" hidefocus="true"><span>测试类目2(6)</span></a></li>
+                               		<li data-category="['长裤23','中裤01','短裤01']"><a href="#" hidefocus="true"><span>测试类目3(2)</span></a></li>
+                                	<li data-category="['长裤24','中裤01','短裤01']"><a href="#" hidefocus="true"><span>测试类目4(6)</span></a></li>
+                                	<li data-category="['长裤25','中裤01','短裤01']"><a href="#" hidefocus="true"><span>测试类目5(6)</span></a></li>
+                                	<li data-category="['长裤26','中裤01','短裤01']"><a href="#" hidefocus="true"><span>测试类目6(6)</span></a></li>
+                            	</ul>
+                            	<ul class="tips-wrap none">
+                               	 	<li data-category="['长裤31','中裤01','短裤01']"><a href="#" hidefocus="true"><span>测试类目2-1(6)</span></a></li>
+                                	<li data-category="['长裤32','中裤01','短裤01']"><a href="#" hidefocus="true"><span>测试类目2-2(6)</span></a></li>
+                               		<li data-category="['长裤33','中裤01','短裤01']"><a href="#" hidefocus="true"><span>测试类目2-3(2)</span></a></li>
+                                	<li data-category="['长裤34','中裤01','短裤01']"><a href="#" hidefocus="true"><span>测试类目2-4(6)</span></a></li>
+                                	<li data-category="['长裤35','中裤01','短裤01']"><a href="#" hidefocus="true"><span>测试类目2-5</span></a></li>
+                                	<li data-category="['长裤36','中裤01','短裤01']"><a href="#" hidefocus="true"><span>测试类目2-6(6)</span></a></li>
+                            	</ul>                          	
+                            </div>
+                            <div id="J_ThirdCategory" class="none third-category-wrap">
+                            	<div class="hr"></div>
+                            	<ul class="last-tips-wrap" id="J_LastTipsWrap"></ul>                          	
+                            </div> 
+                        </div>
+                    </div>
+                    <div class="result-list-wrap">
+                        <div class="J_listWrap result-list" data-waterfall-config='{"url":["http://tiao.jianghu.daily.taobao.net/json/categoryChoiceActivity.htm?categoryId=16&page_size=12&type=1","http://tiao.jianghu.daily.taobao.net/json/categoryChoiceActivity.htm?categoryId=16&page_size=12&type=1"]}'>
+                            <div class="listWrap1 J_listWrap1"></div>
+                            <div class="line" style="display: none;" id="J_line"><span>西湖区的人最近关注的宝贝</span><em></em></div>
+                            <div class="listWrap2 J_listWrap2"></div>
+                        </div>
+                    </div>
+
+                    <div class="pages">
+                        <p class="page-list">
+                            <span class="current">1</span>
+                            <a href="#">2</a>
+                            <a href="#">3</a>
+                            <a href="#">4</a>
+                            <a href="#">5</a>
+                            ...
+                            <a href="#">30</a>
+                            <a class="prev disabled" href="#">上一页</a>
+                            <a class="next" href="#">下一页</a>
+                        </p>
+                        <form class="page-skip" action="#">
+                            <label for="num">到 <input id="num" class="num" type="text" value=""> 页</label>
+                            <input class="btn" type="button" value="确定">
+                        </form>
+                    </div>
+
+                    <div class="main-hot-list">
+                        <div class="widget hot-list city">
+                            <h3><a href="hot-list.html" target="_blank">更多</a><em><strong>城区</strong>-同城网购最多的</em></h3>
+                            <ol class="list">
+                                <li class="no1"><span>650件</span><em>1</em><a href="#" target="_blank">杭州银马公寓</a></li>
+                                <li class="no2"><span>650件</span><em>2</em><a href="#" target="_blank">南都德家公寓</a></li>
+                                <li class="no3"><span>650件</span><em>3</em><a href="#" target="_blank">翠苑五区</a></li>
+                            </ol>
+                        </div>
+
+                        <div class="widget hot-list city">
+                            <h3><a href="hot-list.html" target="_blank">更多</a><em><strong>城市</strong>-全国网购最多的</em></h3>
+                            <ol class="list">
+                                <li class="no1"><span>650件</span><em>1</em><a href="#" target="_blank">杭州银马公寓</a></li>
+                                <li class="no2"><span>650件</span><em>2</em><a href="#" target="_blank">南都德家公寓</a></li>
+                                <li class="no3"><span>650件</span><em>3</em><a href="#" target="_blank">翠苑五区</a></li>
+                            </ol>
+                        </div>
+
+                        <div class="widget hot-list money">
+                            <h3><a href="hot-list.html" target="_blank">更多</a><em><strong>城区</strong>-同城人均消费最高的</em></h3>
+                            <ol class="list">
+                                <li class="no1"><span>650件</span><em>1</em><a href="#" target="_blank">杭州银马公寓</a></li>
+                                <li class="no2"><span>650件</span><em>2</em><a href="#" target="_blank">南都德家公寓</a></li>
+                                <li class="no3"><span>650件</span><em>3</em><a href="#" target="_blank">翠苑五区</a></li>
+                            </ol>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="J_Aitao-bar aitao-bar left">
+                    <div class="widget">
+                        <h3><a href="#" target="_blank">管理</a><em>我常用的地址</em></h3>
+                        <ol class="list address">
+                            <li>
+                                <address><a href="#">创业大厦</a></address>
+                            </li>
+                            <li>
+                                <address><a href="#">浙江大学紫金湾校区</a></address>
+                            </li>
+                            <li>
+                                <address><a href="#">耀江文鼎苑</a></address>
+                            </li>
+                            <li>
+                                <address><a href="#">桂花城</a></address>
+                            </li>
+                        </ol>
+                    </div>
+
+                    <form class="aitao-search" action="#">
+                        <input class="val" id="J_SearchInput" type="text" placeholder="搜索你感兴趣的地址"/>
+                        <input class="btn" type="button" value="搜索">
+                    </form>
+
+                    <div class="widget hot-list">
+                        <h3><a href="hot-list.html" target="_blank">更多</a><em>同城网购最多的小区</em></h3>
+                        <ol class="list">
+                            <li class="no1"><span>650件</span><em>1</em><a href="#" target="_blank">杭州银马公寓</a></li>
+                            <li class="no2"><span>650件</span><em>2</em><a href="#" target="_blank">南都德家公寓</a></li>
+                            <li class="no3"><span>650件</span><em>3</em><a href="#" target="_blank">翠苑五区</a></li>
+                            <li><span>650件</span><em>4</em><a href="#" target="_blank">杭州银马公寓</a></li>
+                            <li><span>650件</span><em>5</em><a href="#" target="_blank">翠苑五区</a></li>
+                        </ol>
+                    </div>
+
+                    <div class="widget hot-list">
+                        <h3><a href="hot-list.html" target="_blank">更多</a><em>同城网购最多的大厦</em></h3>
+                        <ol class="list">
+                            <li class="no1"><span>650件</span><em>1</em><a href="#" target="_blank">杭州银马公寓</a></li>
+                            <li class="no2"><span>650件</span><em>2</em><a href="#" target="_blank">南都德家公寓</a></li>
+                            <li class="no3"><span>650件</span><em>3</em><a href="#" target="_blank">翠苑五区</a></li>
+                            <li><span>650件</span><em>4</em><a href="#" target="_blank">杭州银马公寓</a></li>
+                            <li><span>650件</span><em>5</em><a href="#" target="_blank">翠苑五区</a></li>
+                        </ol>
+                    </div>
+
+                    <div class="widget hot-list">
+                        <h3><a href="hot-list.html" target="_blank">更多</a><em>全国网购最多的大学</em></h3>
+                        <ol class="list">
+                            <li class="no1"><span>650件</span><em>1</em><a href="#" target="_blank">杭州银马公寓</a></li>
+                            <li class="no2"><span>650件</span><em>2</em><a href="#" target="_blank">南都德家公寓</a></li>
+                            <li class="no3"><span>650件</span><em>3</em><a href="#" target="_blank">翠苑五区</a></li>
+                            <li><span>650件</span><em>4</em><a href="#" target="_blank">杭州银马公寓</a></li>
+                            <li><span>650件</span><em>5</em><a href="#" target="_blank">翠苑五区</a></li>
+                        </ol>
+                    </div>
+
+                    <div class="widget">
+                        <h3><em>帮助和说明</em></h3>
+
+                        <div class="widget-contain">
+                            <p>周边服务为了帮助亲更有效的选择商品。这里展示亲附近的人近期都买了什么，收藏了什么。为了保护其他用户的隐私又帮助亲能不放过任何一个宝贝，我们不展示其他用户的个人信息和敏感商品。如果您觉得这个有趣，请告诉您身边的朋友。</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="J_AtFixInBottom" class="at-fix-in-bottom">
+    <a href="#" class="at-go-top" id="J_AtGoTop" title="返回顶部" hidefocus="true">返回顶部</a>
+    <a href="http://www.taobao.com/go/act/mytaobao-feedback.php" target="_blank" class="at-feedback" id="J_AtFeedback"
+       title="建议反馈" hidefocus="true"hidefocus="true">建议反馈</a>
+</div>
+<script type="tpl" id="tpl">
+    <div class="result-item ks-waterfall">
+        <div class="result-item-wrap">
+            <div class="item-pic">
+                <a href="{{titleUrl}}" target="_blank" title="{{title}}">
+                    <img src="{{imgs[0]}}"
+                         alt="" width="210" height="{{iHeight[0]}}"/>
+                </a>
+            </div>
+            <div class="item-detail">
+                <p class="sold-info"><span
+                        class="num">已售&nbsp;{{iHeight[0]}}</span><span
+                        class="price del"><em>{{iHeight[0]}}</em>元</span><span
+                        class="price J_Special"><em class="highlight">{{iHeight[0]}}.00</em>元</span>
+                </p>
+            </div>
+        </div>
+    </div>
+</script>
+<script type="text/javascript" src="assets/1.0/js/aitao-index.js"></script>
+<script type="text/javascript" src="assets/1.0/js/waterfall.js"></script>
+<script type="text/javascript" src="assets/1.0/js/gotop.js"></script>
+
+
+<!-- footer -->
+<div id="footer">
+    <div class="g_foot">
+        <div class="g_foot-ali">
+            <a class="g_foot-nohover" target="_self" href="javascript:void(0)">阿里巴巴集团</a> <b>|</b>
+            <a class="g_foot-nohover" target="_self" href="javascript:void(0)">阿里巴巴网络：</a>
+            <a href="http://www.alibaba.com/">国际站</a>
+            <a href="http://china.alibaba.com/">中文站</a>
+            <a href="http://seller.aliexpress.com/">全球速卖通</a> <b>|</b>
+            <a href="http://www.taobao.com/?id=shouye_taobao">淘宝网</a>
+            <b>|</b>
+            <a href="http://www.tmall.com/">天猫</a>
+            <b>|</b>
+            <a href="http://www.etao.com/">一淘</a>
+            <b>|</b>
+            <a href="http://www.aliyun.com/">阿里云</a>
+            <b>|</b>
+            <a href="http://www.yahoo.com.cn/">中国雅虎</a>
+            <b>|</b>
+            <a href="http://www.alipay.com/">支付宝</a>
+        </div>
+        <div class="g_foot-nav">
+            <a href="http://www.taobao.com/about/">关于淘宝</a>
+            <a href="http://www.taobao.com/about/partners.php">合作伙伴</a>
+            <a href="http://pro.taobao.com/">营销中心</a>
+            <a href="http://service.taobao.com/support/main/service_center.htm">服务中心</a>
+            <a href="http://open.taobao.com/">开放平台</a>
+            <a href="http://www.taobao.com/about/join.php">诚征英才</a>
+            <a href="http://www.taobao.com/about/contact.php">联系我们</a>
+            <a href="http://www.taobao.com/sitemap.php">网站地图</a>
+            <a href="http://www.taobao.com/about/copyright.php">版权说明</a>
+            <span>&copy; 2012 淘宝(中国)软件有限公司 版权所有</span>
+        </div>
+        <span class="g_foot-toy"></span>
+        <span class="g_foot-line"></span>
+    </div>
+
+    <style>
+        .g_foot {
+            width: 960px;
+            margin: 0 auto;
+            font: 12px / 1.5 tahoma, arial, 宋 体 b8b4f53;
+            padding: 7px 0 9px;
+            color: #b0b0b0;
+            text-align: left !important;
+            position: relative;
+            clear: both;
+        }
+
+        .g_foot a {
+            margin: 0 4px;
+            color: #3e3e3e;
+            text-decoration: none;
+        }
+
+        .g_foot a:hover {
+            color: #F60;
+            text-decoration: underline;
+
+        }
+
+        .g_foot-ali {
+            margin-right: 100px;
+            padding-left: 0;
+            border-bottom: 1px solid #D3D3D3;
+            padding-bottom: 8px;
+        }
+
+        .g_foot-nohover {
+            cursor: default;
+        }
+
+        .g_foot-nohover:hover {
+            color: #3e3e3e !important;
+            text-decoration: none !important;
+        }
+
+        .g_foot-ali b {
+            margin: 0 4px;
+            color: #d3d3d3;
+            font-weight: normal;
+        }
+
+        .g_foot-nav {
+            margin-top: 8px;
+            line-height: 20px;
+        }
+
+        .g_foot-nav span {
+            margin-left: 50px;
+        }
+
+        .g_foot-toy {
+            position: absolute;
+            background: url(http://img01.taobaocdn.com/tps/i1/T1MMPaXkNjXXaXezbh-48-70.png) no-repeat;
+            _background: url(http://img01.taobaocdn.com/tps/i1/T1XgzaXX0kXXaXezbh-48-70.png) no-repeat;
+            width: 69px;
+            height: 100px;
+            display: block;
+            right: 0px;
+            top: 0px;
+        }
+
+            /* IE9 only */
+        :root .g_foot-toy {
+            right: -20 px9;
+        }
+
+        .g_foot-line {
+            display: none;
+            position: absolute;
+            background: url(http://img01.taobaocdn.com/tps/i1/T1I_56Xl0wXXXXXXXX-104-1.png) no-repeat;
+            width: 104px;
+            height: 1px;
+            right: 45px;
+            top: 33px;
+        }
+    </style>
+</div>
+<!-- footer -->
+
+</body>
+</html>

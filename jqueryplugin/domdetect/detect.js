@@ -2,10 +2,11 @@ void function($) {
 	$.fn.xxOverSelect = function() {
 		var $left, $right, $top, $bottom, enabled = false;
 		var overFn = function(evt) {
-			if (this === evt.target) {
+			var target = evt.target;
+			if (this === evt.target || target == $left[0] || target == $right[0] || target == $top[0] || target == $bottom[0]) {
 				return true;
 			}
-
+			
 			var $target = $(evt.target), h = $target.outerHeight(), w = $target.outerWidth(), oft = $target.offset();
 			$left.offset({
 				left : oft.left - 4,
@@ -123,7 +124,7 @@ void function() {
 			ret.unshift(elem.nodeName.toLowerCase() + '$' + XX.indexTag(elem));
 			elem = elem.parentNode;
 		}
-
+		console.log(ret.join('>'));
 		return ret.join('>')
 	};
 
@@ -154,8 +155,8 @@ void function($){
 		})
 	}
 	$(function(){
-		$('body').xxOverSelect().on('xxselsect:select', function(el){
-			sendMsg(XX.path(el));
+		$('body').xxOverSelect().on('xxselsect:select', function(ev, el){
+			confirm("是否发送消息？") && sendMsg(XX.path(el));
 		});
 	});
 }(jQuery);

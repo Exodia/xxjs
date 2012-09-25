@@ -127,20 +127,66 @@ void function() {
 		console.log(ret.join('>'));
 		return ret.join('>')
 	};
-
+	
+	
 	/*获取元素在DOM树中相同标签节点的位置索引*/
-	XX.indexTag = function(elem) {
-		var name = elem.nodeName.toLowerCase(), i;
-		if (name === 'body' || name === 'html') {
+	XX.indexTag = function(elem, deep) {
+		var name = elem.nodeName, i, children,
+			elems;
+		if (name === 'BODY' || name === 'HTML') {
 			return 0;
 		}
-		var elems = elem.parentNode.getElementsByTagName(name);
+		
+		if(deep) {
+			elems = elem.parentNode.getElementsByTagName(name);
+		} else {
+			elems = [];
+			children = XX.children(elem.parentNode);
+			for(i = 0, len = children.length; i < len; ++i) {
+				if(children[i].nodeName === name) {
+					elems.push(children[i]);
+				}
+			}
+		}
+		
 		for ( i = elems.length - 1; i > -1; --i) {
 			if (elem === elems[i]) {
 				return i;
 			}
 		}
 	};
+	
+	
+	/*获取元素的非文本节点集合*/
+	XX.children = function(elem) {
+		var ret;
+		if (elem.children) {
+			return XX.nodeListToArray(elem.children);
+		}
+
+		ret = [];
+		for (var i = 0, nodes = elem.childNodes, len = nodes.length; i < len; ++i) {
+			if (nodes[i].nodeType === 1) {
+				ret.push(nodes[i]);
+			}
+		}
+
+		return ret;
+	};
+	
+	/*NodeList转化为数组*/
+	XX.nodeListToArray = function(list) {
+		var elems = [];
+		try {
+			elems = Array.prototype.slice.call(list, 0);
+		} catch (e) {/*For IE*/
+			for (var i = 0, len = list.length; i < len; ++i) {
+				elems.push(list[i]);
+			}
+		}
+		return elems;
+	};
+
 }();
 
 void function($){

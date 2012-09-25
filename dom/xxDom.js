@@ -1,11 +1,54 @@
-void function(win, undefined){
+void function(win, undefined) {
 	var XX = {};
+	
+	/*获取元素在DOM树中的路径，以“标签名$索引位置>标签名$索引位置“的字符串返回
+	 *参数elem:计算路径的元素
+	 * 参数root: 路径开始的节点,默认为body,最高也为body
+	 * */
+	XX.path = function(elem, root) {
+		var ret = [], body = document.body, root = root || body;
+		while (elem !== root && elem !== body) {
+			ret.unshift(elem.nodeName.toLowerCase() + '$' + XX.indexTag(elem));
+			elem = elem.parentNode;
+		}
+		console.log(ret.join('>'));
+		return ret.join('>')
+	};
+	
+	
+	/*获取元素在DOM树中相同标签节点的位置索引*/
+	XX.indexTag = function(elem, deep) {
+		var name = elem.nodeName, i, children,
+			elems;
+		if (name === 'BODY' || name === 'HTML') {
+			return 0;
+		}
+		
+		if(deep) {
+			elems = elem.parentNode.getElementsByTagName(name);
+		} else {
+			elems = [];
+			children = XX.children(elem.parentNode);
+			for(i = 0, len = children.length; i < len; ++i) {
+				if(children[i].nodeName === name) {
+					elems.push(children[i]);
+				}
+			}
+		}
+		
+		for ( i = elems.length - 1; i > -1; --i) {
+			if (elem === elems[i]) {
+				return i;
+			}
+		}
+	};
+	
 	/*
 	 * 获得elem的前一个非文本节点的兄弟节点
 	 * */
 	XX.prev = function(elem) {
 		/*IE9+, Chrome, FF3.5+ Safari 4+, Opera 10+*/
-		if( typeof elem.previousElementSibling !== 'undefined') {
+		if ( typeof elem.previousElementSibling !== 'undefined') {
 			return elem.previousElementSibling;
 		}
 
@@ -18,9 +61,14 @@ void function(win, undefined){
 
 	/*获取元素的非文本节点集合*/
 	XX.children = function(elem) {
-		var ret = [];
-		for(var i = 0, nodes = elem.childNodes, len = nodes.length; i < len; ++i) {
-			if(nodes[i].nodeType === 1) {
+		var ret;
+		if (elem.children) {
+			return nodeListToArray(elem.children);
+		}
+
+		ret = [];
+		for (var i = 0, nodes = elem.childNodes, len = nodes.length; i < len; ++i) {
+			if (nodes[i].nodeType === 1) {
 				ret.push(nodes[i]);
 			}
 		}
@@ -32,7 +80,7 @@ void function(win, undefined){
 	 * */
 	XX.next = function(elem) {
 		/*IE9+, Chrome, FF3.5+ Safari 4+, Opera 10+*/
-		if( typeof elem.nextElementSibling !== 'undefined') {
+		if ( typeof elem.nextElementSibling !== 'undefined') {
 			return elem.nextElementSibling;
 		}
 
@@ -48,14 +96,14 @@ void function(win, undefined){
 	 * */
 	XX.first = function(elem) {
 		/*IE9+, Chrome, FF3.5+ Safari 4+, Opera 10+*/
-		if( typeof elem.firstElementChild !== 'undefined') {
+		if ( typeof elem.firstElementChild !== 'undefined') {
 			return elem.firstElementChild;
 		}
 
-		if(elem.children) {//带children属性，保存着非文本节点
-			for(var i = 0, len = elem.children.length; i < len; ++i) {
+		if (elem.children) {//带children属性，保存着非文本节点
+			for (var i = 0, len = elem.children.length; i < len; ++i) {
 				/*IE8以及之前的版本children属性包含注释节点，所以这里过滤到第一个元素节点*/
-				if(elem.children[i].nodeType === 1) {
+				if (elem.children[i].nodeType === 1) {
 					return elem.children[i];
 				}
 			}
@@ -71,13 +119,13 @@ void function(win, undefined){
 	 * */
 	XX.last = function(elem) {
 		/*IE9+, Chrome, FF3.5+ Safari 4+, Opera 10+*/
-		if( typeof elem.lastElementChild !== 'undefined') {
+		if ( typeof elem.lastElementChild !== 'undefined') {
 			return elem.lastElementChild;
 		}
 
-		if(elem.children) {//带children属性，保存着非文本节点
-			for(var i = elem.chidren.length - 1; i > -1; --i) {
-				if(elem.children[i].nodeType === 1) {
+		if (elem.children) {//带children属性，保存着非文本节点
+			for (var i = elem.chidren.length - 1; i > -1; --i) {
+				if (elem.children[i].nodeType === 1) {
 					return elem.children[i];
 				}
 			}
@@ -94,7 +142,7 @@ void function(win, undefined){
 		try {
 			elems = Array.prototype.slice.call(list, 0);
 		} catch (e) {/*For IE*/
-			for(var i = 0, len = list.length; i < len; ++i) {
+			for (var i = 0, len = list.length; i < len; ++i) {
 				elems.push(list[i]);
 			}
 		}
@@ -105,10 +153,10 @@ void function(win, undefined){
 	 * 选择文本区域内的一段文字
 	 * */
 	XX.selectText = function(textfield, start, end) {
-		if(textfield.setSelectionRange) {
+		if (textfield.setSelectionRange) {
 			textfield.setSelectionRange(start, end);
 			textfield.focus();
-		} else if(textfield.createTextRange) {
+		} else if (textfield.createTextRange) {
 			var range = textfield.createTextRange();
 			range.collapse(true);
 			range.moveStart('character', start);
@@ -122,7 +170,7 @@ void function(win, undefined){
 	 * 获得用户选择的文本
 	 * */
 	XX.getSelectedText = function(textfield) {
-		if(document.selection) {
+		if (document.selection) {
 			return document.selection.createRange().text;
 		} else {
 			return textfield.value.substring(textfield.selectionStart, textfield.selectionEnd);
@@ -139,12 +187,12 @@ void function(win, undefined){
 	XX.getElementsByClassName = function(name, type, context) {
 		context = context || document;
 		var ret = null;
-		if(context.getElementsByClassName) {
+		if (context.getElementsByClassName) {
 			ret = XX.nodeListToArray(context.getElementsByClassName(name));
-			if(type) {
+			if (type) {
 				type = type.toUpperCase();
-				for(var i = 0, len = ret.length; i < len; ) {
-					if(ret[i].nodeName !== type) {
+				for (var i = 0, len = ret.length; i < len; ) {
+					if (ret[i].nodeName !== type) {
 						ret.splice(i, 1);
 					} else {++i;
 					}
@@ -154,8 +202,8 @@ void function(win, undefined){
 			var elems = context.getElementsByTagName(type || '*'), reg = new RegExp("(^|\\s)" + name + "($|\\s)");
 
 			ret = [];
-			for(var i = 0, len = elems.length; i < len; ++i) {
-				if(reg.test(elems[i].className)) {
+			for (var i = 0, len = elems.length; i < len; ++i) {
+				if (reg.test(elems[i].className)) {
 					ret.push(elems[i]);
 				}
 			}
@@ -169,14 +217,14 @@ void function(win, undefined){
 	 * 是则返回true，否则返回false;
 	 * */
 	XX.isAncestor = function(ances, elem) {
-		if( typeof ances.contains == 'function') {//IE、Safari3+、Opera、Chrome
+		if ( typeof ances.contains == 'function') {//IE、Safari3+、Opera、Chrome
 			return ances.contains(elem);
-		} else if( typeof ances.compareDocumentPosition == 'function') {
+		} else if ( typeof ances.compareDocumentPosition == 'function') {
 			return !!(ances.compareDocumentPosition(elem) & 16);
 		} else {
 			var par = elem.parentNode;
-			while(par !== null) {
-				if(ances === par) {
+			while (par !== null) {
+				if (ances === par) {
 					return true;
 				}
 
@@ -198,11 +246,11 @@ void function(win, undefined){
 	 *检测元素是否具有给定的类名，有则返回true，否则返回false
 	 * */
 	XX.hasClass = function(elem, name) {
-		if(elem.classList) {//FF3.6+, Chrome
+		if (elem.classList) {//FF3.6+, Chrome
 			return elem.classList.contains(name);
 		}
 
-		if(elem.className) {
+		if (elem.className) {
 			var reg = new RegExp("(^|\\s)" + name + "($|\\s)");
 			return reg.test(elem.className);
 		}
@@ -214,11 +262,11 @@ void function(win, undefined){
 	 *给元素添加一个类
 	 * */
 	XX.addClass = function(elem, name) {
-		if(elem.classList) {//FF3.6+, Chrome
+		if (elem.classList) {//FF3.6+, Chrome
 			return elem.classList.add(name);
 		}
 
-		if(!XX.hasClass(elem, name)) {
+		if (!XX.hasClass(elem, name)) {
 			elem.className = elem.className ? elem.className + ' ' + name : name;
 		}
 	}
@@ -226,12 +274,12 @@ void function(win, undefined){
 	 *移除元素的一个类
 	 * */
 	XX.removeClass = function(elem, name) {
-		if(elem.classList) {//FF3.6+, Chrome
+		if (elem.classList) {//FF3.6+, Chrome
 			elem.classList.remove(name);
 			return;
 		}
 
-		if(elem.className) {
+		if (elem.className) {
 			var reg = new RegExp("(^|\\s)" + name + "($|\\s)", 'g');
 			elem.className = XX.trim(elem.className.replace(reg, ' '));
 		}
@@ -241,25 +289,24 @@ void function(win, undefined){
 	 *若元素存在name类名，则移除该类，否则添加该类
 	 * */
 	XX.toggleClass = function(elem, name) {
-		if(elem.classList) {//FF3.6+, Chrome
+		if (elem.classList) {//FF3.6+, Chrome
 			elem.classList.toggle(name);
 			return;
 		}
 
-		if(XX.hasClass(elem, name)) {
+		if (XX.hasClass(elem, name)) {
 			XX.removeClass(elem, name);
 		} else {
 			XX.addClass(elem, name);
 		}
 	}
-	
 	/*
 	 *寻找首个具有对应类名的父元素
 	 * */
 	XX.getParentByClassName = function(elem, name) {
 		var parent = elem.parentNode;
-		while(parent) {
-			if(XX.hasClass(parent, name)) {
+		while (parent) {
+			if (XX.hasClass(parent, name)) {
 				return parent;
 			}
 		}
@@ -279,7 +326,7 @@ void function(win, undefined){
 	 * 设置elem元素内的文本节点为text
 	 */
 	XX.setInnerText = function(elem, text) {
-		if( typeof elem.textContent == "string") {
+		if ( typeof elem.textContent == "string") {
 			elem.textContent = text;
 		} else {
 			elem.innerText = text;
@@ -302,9 +349,9 @@ void function(win, undefined){
 		var script = document.createElement('script');
 		script.type = "text/javascript";
 		script.src = src;
-		if(script.readyState) {//IE
+		if (script.readyState) {//IE
 			script.onreadystatechange = function() {
-				if(script.readyState == 'loaded' || script.readyState == 'complete') {
+				if (script.readyState == 'loaded' || script.readyState == 'complete') {
 					script.onreadystatechange = null;
 					callback();
 				}
@@ -360,15 +407,15 @@ void function(win, undefined){
 	 * 获取元素实际的样式属性值
 	 */
 	XX.getStyle = function(elem, name) {
-		if(elem.style[name]) {
+		if (elem.style[name]) {
 			return elem.style[name];
 		}
 		/*针对IE*/
-		if(elem.currentStyle) {
+		if (elem.currentStyle) {
 			return elem.currentStyle[name];
 		}
 		/*W3C标准*/
-		if(document.defaultView && document.defaultView.getComputedStyle) {
+		if (document.defaultView && document.defaultView.getComputedStyle) {
 			var s = document.defaultView.getComputedStyle(elem, null);
 			return s && s[name];
 		}
@@ -382,7 +429,7 @@ void function(win, undefined){
 	XX.getElemLeft = function(elem) {
 		var left = elem.offsetLeft, cur_parent = elem.offsetParent;
 
-		while(null !== cur_parent) {
+		while (null !== cur_parent) {
 			left += cur_parent.offsetLeft;
 			cur_parent = cur_parent.offsetParent;
 		}
@@ -393,7 +440,7 @@ void function(win, undefined){
 	XX.getElemTop = function(elem) {
 		var top = elem.offsetTop, cur_parent = elem.offsetParent;
 
-		while(null !== cur_parent) {
+		while (null !== cur_parent) {
 			top += cur_parent.offsetTop;
 			cur_parent = cur_parent.offsetParent;
 		}
@@ -451,7 +498,7 @@ void function(win, undefined){
 	 */
 	XX.resetCSS = function(elem, css_obj) {
 		var old = {};
-		for(var k in css_obj) {
+		for (var k in css_obj) {
 			old[k] = elem.style[k];
 			elem.style[k] = css_obj[k];
 		}
@@ -463,7 +510,7 @@ void function(win, undefined){
 	 *设置元素的相关CSS属性，参数与XX.resetCSS函数一样，返回undefined
 	 */
 	XX.setCSS = function(elem, css_obj) {
-		for(var k in css_obj) {
+		for (var k in css_obj) {
 			elem.style[k] = css_obj[k];
 		}
 	};
@@ -473,7 +520,7 @@ void function(win, undefined){
 	 */
 	XX.getFullHeight = function(elem) {
 		//若元素display不为none，那么使用offsetHeight获得完整高度，若没有offsetHeight，则使用getHeight
-		if(XX.getStyle(elem, 'display') != 'none') {
+		if (XX.getStyle(elem, 'display') != 'none') {
 			return elem.offsetHeight || XX.getHeight(elem);
 		}
 
@@ -494,7 +541,7 @@ void function(win, undefined){
 	};
 
 	XX.getFullWidth = function(elem) {
-		if(XX.getStyle(elem, 'display') != 'none') {
+		if (XX.getStyle(elem, 'display') != 'none') {
 			return elem.offsetWidth || XX.getWidth(elem);
 		}
 
@@ -518,7 +565,7 @@ void function(win, undefined){
 	XX.hide = function(elem) {
 		var cur_display = XX.getStyle(elem, 'display');
 
-		if(cur_display != 'none') {
+		if (cur_display != 'none') {
 			elem.$oldDisplay = cur_display;
 		}
 
@@ -539,7 +586,7 @@ void function(win, undefined){
 	 */
 	XX.setOpacity = function(elem, level) {
 		//如果存在filters这个属性，则它是IE，所以设置元素的Alpha滤镜
-		if(elem.filters) {
+		if (elem.filters) {
 			elem.style.filter = 'alpha(opacity=' + level + ')';
 			//必须设置zoom,要不然透明度在IE下不生效
 			elem.style.zoom = 1;
@@ -556,7 +603,7 @@ void function(win, undefined){
 
 		XX.show(elem);
 
-		for(var i = 0; i <= 100; i += 5) {
+		for (var i = 0; i <= 100; i += 5) {
 			//闭包函数
 			(function() {
 				var pos = i;
@@ -577,10 +624,10 @@ void function(win, undefined){
 		type = type || 'both';
 		var h, w, len = arguments.length;
 
-		if(4 === len) {//4个参数均指明
+		if (4 === len) {//4个参数均指明
 			w = wvalue;
 			h = hvalue;
-			if('both' !== type) {
+			if ('both' !== type) {
 				elem.style[type] = '0px';
 				//从0px开始展开
 			} else {
@@ -588,9 +635,9 @@ void function(win, undefined){
 				//从0px开始展开
 				elem.style.width = '0px';
 			}
-		} else if(3 === len) {//只指明了3个参数
+		} else if (3 === len) {//只指明了3个参数
 			w = h = wvalue;
-			if('both' !== type) {
+			if ('both' !== type) {
 				elem.style[type] = '0px';
 				//从0px开始展开
 			} else {
@@ -598,15 +645,15 @@ void function(win, undefined){
 				//从0px开始展开
 			}
 		} else {
-			if('height' === type) {
+			if ('height' === type) {
 				h = XX.getFullHeight(elem);
 				elem.style.height = '0px';
 			}
-			if('width' === type) {
+			if ('width' === type) {
 				w = XX.getFullWidth(elem);
 				elem.style.width = '0px';
 			}
-			if('both' === type) {
+			if ('both' === type) {
 				h = XX.getFullHeight(elem);
 				w = XX.getFullWidth(elem);
 				elem.style.height = '0px';
@@ -617,7 +664,7 @@ void function(win, undefined){
 		XX.show(elem, 'block');
 		//先显示元素，但是看不到它，因为元素宽或高为0
 
-		for(var i = 0; i <= 100; i += 5) {
+		for (var i = 0; i <= 100; i += 5) {
 			(function() {
 				var pos = i;
 				setTimeout(function() {
@@ -659,7 +706,7 @@ void function(win, undefined){
 	 */
 	XX.getPageHeight = function() {
 		var de = document.documentElement;
-		if(de) {
+		if (de) {
 			return Math.max(de.scrollHeight, de.clientHeight, document.body.scrollHeight);
 		} else {
 			return document.body.scrollHeight;
@@ -668,7 +715,7 @@ void function(win, undefined){
 
 	XX.getPageWidth = function() {
 		var de = document.documentElement;
-		if(de) {
+		if (de) {
 			return Math.max(de.scrollWidth, de.clientWidth, document.body.scrollWidth);
 		} else {
 			return document.body.scrollWidth;
@@ -701,7 +748,7 @@ void function(win, undefined){
 	XX.domReady = function(fn, scope) {
 		var doc = document, readyFn = null;
 
-		if(doc.addEventListener) {//W3C标准
+		if (doc.addEventListener) {//W3C标准
 			readyFn = function() {
 				doc.removeEventListener('DOMContentLoaded', readyFn, false);
 				fn.apply(scope);
@@ -711,9 +758,9 @@ void function(win, undefined){
 		}
 
 		/*IE下*/
-		else if(doc.attachEvent) {
+		else if (doc.attachEvent) {
 			readyFn = function() {
-				if(doc.readyState == 'complete' && !readyFn.done) {
+				if (doc.readyState == 'complete' && !readyFn.done) {
 					readyFn.done = true;
 					fn.apply(scope);
 
@@ -725,7 +772,7 @@ void function(win, undefined){
 			doc.attachEvent('onreadystatechange', readyFn);
 			window.attachEvent('onload', readyFn);
 			void function() {
-				if(readyFn.done) {
+				if (readyFn.done) {
 					return;
 				}
 
@@ -741,28 +788,28 @@ void function(win, undefined){
 			}();
 		}
 	};
-	
-	XX.isWindow = function(elem){
+
+	XX.isWindow = function(elem) {
 		var des = Object.prototype.toString.call(elem);
 		//FireFox Chrome Safria
-		if(des == "[object Window]" || des == "[object global]" || des == "[object DOMWindow]"){
+		if (des == "[object Window]" || des == "[object global]" || des == "[object DOMWindow]") {
 			return true;
 		}
-		
-		if(des == "[object Object]" && elem.window == elem){
+
+		if (des == "[object Object]" && elem.window == elem) {
 			return true;
 		}
 	};
-	
+
 	/*事件组件命名空间*/
 	XX.EventUtil = {
 		/*
 		 * 添加事件
 		 * */
 		addEvent : function(elem, type, handler, hasCapture) {
-			if(elem.addEventListener) {
+			if (elem.addEventListener) {
 				elem.addEventListener(type, handler, hasCapture);
-			} else if(elem.attachEvent) {
+			} else if (elem.attachEvent) {
 				elem.attachEvent('on' + type, handler);
 			} else {
 				elem['on' + type] = handler;
@@ -773,9 +820,9 @@ void function(win, undefined){
 		 * 移除事件
 		 * */
 		removeEvent : function(elem, type, handler, hasCapture) {
-			if(elem.removeEventListener) {
+			if (elem.removeEventListener) {
 				elem.removeEventListener(type, handler, hasCapture);
-			} else if(elem.detachEvent) {
+			} else if (elem.detachEvent) {
 				elem.detachEvent('on' + type, handler);
 			} else {
 				elem['on' + type] = null;
@@ -800,7 +847,7 @@ void function(win, undefined){
 		 * 阻止事件默认行为
 		 * */
 		preventDefault : function(evt) {
-			if(evt.preventDefaut) {
+			if (evt.preventDefaut) {
 				evt.preventDefaut();
 			} else {
 				evt.returnValue = false;
@@ -811,7 +858,7 @@ void function(win, undefined){
 		 * 阻止事件冒泡
 		 * */
 		stopPropagation : function(evt) {
-			if(evt.stopProgapation) {
+			if (evt.stopProgapation) {
 				evt.stopProgapation();
 			} else {
 				evt.cancelBubble = true;
@@ -829,7 +876,7 @@ void function(win, undefined){
 		 * 获得按下的鼠标按钮值， 0为鼠标左键按下， 1为中， 2为右
 		 **/
 		getButton : function(evt) {
-			if(document.implementation.hasFeature('MouseEvents', '2.0')) {
+			if (document.implementation.hasFeature('MouseEvents', '2.0')) {
 				return evt.button;
 			} else {
 				switch(evt.button) {
@@ -891,6 +938,6 @@ void function(win, undefined){
 	/*短引用*/
 	XX.addEvent = XX.on = XX.bind = XX.EventUtil.addEvent;
 	XX.removeEvent = XX.un = XX.unbind = XX.EventUtil.removeEvent;
-	
+
 	win.XX = XX;
 }(window, undefined);

@@ -16,13 +16,11 @@ void function($){
 				zoom:'1',
 				//filter:'alpha(opacity=50)',
 				opacity:0.5,
-				backgroundColor:'green',
-				width:0,
-				height:0
+				backgroundColor:'green'
 			})
 		}
 		
-		_$mask.appendTo(document.body);
+		_$mask.css({width:0, height:0}).appendTo(document.body);
 	};
 	
 	var _disableSelect = function($el) {
@@ -53,11 +51,10 @@ void function($){
 			$(this).trigger('xxRangeSelect:select', [{x1:startX, y1:startY, x2:ev.pageX, y2:ev.pageY}, _$mask]);
 		},
 		mouseup: function(ev) {
-			if(!_status || Math.abs(ev.pageX - x1) < 5 || Math.abs(ev.pageY - y1) < 5) {
+			if(!_status || Math.abs(ev.pageX - startX) < 5 || Math.abs(ev.pageY - startY) < 5) {
+				_status = '';
 				return;
 			}
-			
-			console.log(Math.abs(ev.pageX - x1))
 			
 			_status = '';
 			$(this).trigger('xxRangeSelect:selectend', [{x1:startX, y1:startY, x2:ev.pageX, y2:ev.pageY},  _$mask]);
@@ -248,15 +245,17 @@ void function($){
 		})
 	}
 	$(function(){
-		$('body').xxRangeSelect().on('xxRangeSelect:selectend', function(ev, point, $mask){
-			
+		var $body = $('body');
+		$body.xxRangeSelect().on('xxRangeSelect:selectend', function(ev, point, $mask){
 			if(confirm("是否发送消息？")){
+				$body.xxRangeSelect('disable');
 				var elems = XX.getElementsByRange(point.x1, point.y1, point.x2, point.y2, this);
 				var pathes = [];
 				for(var i = 0, len = elems.length; i < len; ++i) {
 					pathes.push(XX.path(elems[i]));
 				}
 				sendMsg(pathes.join(';'));
+				$body.xxRangeSelect();
 			}
 		});
 	});

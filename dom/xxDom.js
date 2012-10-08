@@ -43,6 +43,38 @@ void function(win, undefined) {
 		}
 	};
 	
+	
+	XX.getElementsByRange = function(x1, y1, x2, y2, context) {
+		var elems, i, len, ret = [];
+		context = context || document.body;
+		elems = context.getElementsByTagName('*');
+		for(i = 0, len = elems.length; i < len; ++i) {
+			XX.isElemInPoint(elems[i], x1, y1, x2, y2) && ret.push(elems[i]);
+		}
+		
+		return ret;
+	};
+	
+	XX.isElemInPoint = function (elem, x1, y1, x2, y2) {
+		var temp, elx, ely;
+		if(x1 > x2) {
+			temp = x1;
+			x1 = x2;
+			x2 = temp;
+		}
+		
+		if(y1 > y2) {
+			temp = y1;
+			y1 = y2;
+			y2 = temp;
+		}
+		
+		elx = XX.getElemLeft(elem);
+		ely = XX.getElemTop(elem);
+		
+		return (x1 <= elx && x2 >= elx) && (y1 <= ely && y2 >= ely);
+	}
+	
 	/*
 	 * 获得elem的前一个非文本节点的兄弟节点
 	 * */

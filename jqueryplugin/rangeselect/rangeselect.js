@@ -16,13 +16,11 @@ void function($){
 				zoom:'1',
 				//filter:'alpha(opacity=50)',
 				opacity:0.5,
-				backgroundColor:'green',
-				width:0,
-				height:0
+				backgroundColor:'green'
 			})
 		}
 		
-		_$mask.appendTo(document.body);
+		_$mask.css({width:0, height:0}).appendTo(document.body);
 	};
 	
 	var _disableSelect = function($el) {
@@ -61,7 +59,7 @@ void function($){
 			$(this).trigger('xxRangeSelect:selectend', [{x1:startX, y1:startY, x2:ev.pageX, y2:ev.pageY},  _$mask]);
 		},
 		mouseleave: function(ev) {
-			$(this).triggerHandler('mouseup');
+			eventFns.mouseup.call(this, ev);
 		},
 		
 		"xxRangeSelect:selectstart": function(ev, point, $mask) {

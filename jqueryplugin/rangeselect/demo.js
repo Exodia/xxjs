@@ -55,12 +55,11 @@ void function($){
 				_status = '';
 				return;
 			}
-			
 			_status = '';
 			$(this).trigger('xxRangeSelect:selectend', [{x1:startX, y1:startY, x2:ev.pageX, y2:ev.pageY},  _$mask]);
 		},
 		mouseleave: function(ev) {
-			$(this).triggerHandler('mouseup');
+			eventFns.mouseup.call(this, ev);
 		},
 		
 		"xxRangeSelect:selectstart": function(ev, point, $mask) {
@@ -122,6 +121,111 @@ void function($){
 	
 }(jQuery);
 
+void function($){
+	$.fn.xxOverSelect = function() {
+		var $left, $right, $top, $bottom, enabled = false;
+		var overFn = function(evt) {
+			var target = evt.target;
+			if(this === target || target === $left[0] || target === $right[0] || target === $top[0] || target === $bottom[0]) {
+				return true;
+			}
+			
+			var $target = $(target), 
+				h = $target.outerHeight(), 
+				w = $target.outerWidth(), 
+				oft = $target.offset();
+			$left.offset({
+				left : oft.left - 4,
+				top : oft.top - 4
+			}).height(h + 4);
+			$right.offset({
+				top : oft.top,
+				left : oft.left + w
+			}).height(h);
+			$top.offset({
+				top : oft.top - 4,
+				left : oft.left
+			}).width(w);
+			$bottom.offset({
+				left : oft.left,
+				top : oft.top + h
+			}).width(w);
+			$(this).trigger('xxselect:over', evt.target);
+			return false;
+		};
+
+		var clickFn = function(evt) {
+			var target = evt.target;
+			if(this === target || target === $left[0] || target === $right[0] || target === $top[0] || target === $bottom[0]) {
+				return true;
+			}
+	
+			$(this).trigger('xxselect:select', evt.target);
+			return false;
+		}
+		var mapFun = {
+			enable : function($elem) {
+				if(enabled) {
+					return;
+				}
+
+				if(!$left) {
+					$left = $("<div>").css({
+						position : 'absolute',
+						zIndex : 9999,
+						left : '-5000px',
+						width : '0',
+						height : '0',
+						border : '2px solid #d4eaf8'
+					}).appendTo('body');
+					$bottom = ( $top = ( $right = $left.clone().appendTo('body')).clone().appendTo('body')).clone().appendTo('body');
+				}
+				
+				if(!$left.parent().length){
+					$left.appendTo('body');
+					$right.appendTo('body');
+					$top.appendTo('body');
+					$bottom.appendTo('body');
+				}
+				$elem.$oldCursor = $elem.css('cursor');
+				$elem.css('cursor', 'pointer');
+				$elem.mouseover(overFn).click(clickFn);
+			},
+
+			disable : function($elem) {
+				$elem.off({
+					mouseover : overFn,
+					click : clickFn
+				}).css('cursor', this.$oldCursor);
+				$left.remove(), $right.remove(), $top.remove(), $bottom.remove();
+				enabled = false;
+			},
+
+			destroy : function($elem) {
+				$elem.off({
+					mouseenter : overFn,
+					click : clickFn
+				}).css('cursor', this.$oldCursor);
+				$left.remove(), $right.remove(), $top.remove(), $bottom.remove();
+				$left = $right = $top = $bottom = null;
+				enabled = false;
+			}
+		}
+		var select = function(options) {
+			if('string' === typeof options) {
+				mapFun[options] && mapFun[options](this);
+				return this;
+			}
+
+			options = options || {};
+			$.extend(options, {});
+			mapFun.enable(this);
+			return this;
+		};
+
+		return select;
+	}();
+}(jQuery);
 
 
 void function() {
@@ -244,18 +348,39 @@ void function($){
 			}
 		})
 	}
+	
 	$(function(){
 		var $body = $('body');
-		$body.xxRangeSelect().on('xxRangeSelect:selectend', function(ev, point, $mask){
+		var CTRL = 17;
+		var rangeModel = false;
+		function keyHandler(ev) {
+			if(ev.ctrlKey) {
+				if(rangeModel = !rangeModel) {
+					$body.xxRangeSelect().xxOverSelect('disable');
+				} else {
+					$body.xxRangeSelect('disable').xxOverSelect();
+				}
+				
+			}
+		}
+		
+		$body.keydown(keyHandler);
+		
+		$body.xxOverSelect().on('xxselect:select', function(ev, el){
 			if(confirm("是否发送消息？")){
-				$body.xxRangeSelect('disable');
+				sendMsg(XX.path(el));
+			}
+		}).on('xxRangeSelect:selectend', function(ev, point, $mask){
+			$body.xxRangeSelect('disable');
+			if(confirm("是否发送消息？")){
+				console.log(point)
 				var elems = XX.getElementsByRange(point.x1, point.y1, point.x2, point.y2, this);
 				var pathes = [];
 				for(var i = 0, len = elems.length; i < len; ++i) {
 					pathes.push(XX.path(elems[i]));
 				}
 				sendMsg(pathes.join(';'));
-				$body.xxRangeSelect();
+			    $body.xxRangeSelect();
 			}
 		});
 	});

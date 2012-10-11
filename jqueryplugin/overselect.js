@@ -2,11 +2,12 @@ void function($){
 	$.fn.xxOverSelect = function() {
 		var $left, $right, $top, $bottom, enabled = false;
 		var overFn = function(evt) {
-			if(this === evt.target) {
+			var target = evt.target;
+			if(this === target || target === $left[0] || target === $right[0] || target === $top[0] || target === $bottom[0]) {
 				return true;
 			}
-
-			var $target = $(evt.target), 
+			
+			var $target = $(target), 
 				h = $target.outerHeight(), 
 				w = $target.outerWidth(), 
 				oft = $target.offset();
@@ -26,16 +27,17 @@ void function($){
 				left : oft.left,
 				top : oft.top + h
 			}).width(w);
-			$(this).trigger('xxselsect:over', evt.target);
+			$(this).trigger('xxselect:over', evt.target);
 			return false;
 		};
 
 		var clickFn = function(evt) {
-			if(this === evt.target) {
+			var target = evt.target;
+			if(this === target || target === $left[0] || target === $right[0] || target === $top[0] || target === $bottom[0]) {
 				return true;
 			}
-
-			$(this).trigger('xxselsect:select', evt.target);
+	
+			$(this).trigger('xxselect:select', evt.target);
 			return false;
 		}
 		var mapFun = {
@@ -56,7 +58,7 @@ void function($){
 					$bottom = ( $top = ( $right = $left.clone().appendTo('body')).clone().appendTo('body')).clone().appendTo('body');
 				}
 				
-				if(!$left.parent()){
+				if(!$left.parent().length){
 					$left.appendTo('body');
 					$right.appendTo('body');
 					$top.appendTo('body');
@@ -73,18 +75,6 @@ void function($){
 					click : clickFn
 				}).css('cursor', this.$oldCursor);
 				$left.remove(), $right.remove(), $top.remove(), $bottom.remove();
-			/*	$left.css({
-					left : '-5000px'
-				});
-				$right.css({
-					left : '-5000px'
-				});
-				$top.css({
-					left : '-5000px'
-				});
-				$bottom.css({
-					left : '-5000px'
-				});*/
 				enabled = false;
 			},
 
@@ -112,4 +102,4 @@ void function($){
 
 		return select;
 	}();
-}(jQuery)
+}(jQuery);

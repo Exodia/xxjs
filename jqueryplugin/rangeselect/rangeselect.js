@@ -12,7 +12,7 @@ void function($){
 		if(!_$mask) {
 			_$mask = $('<div>').css({
 				position: 'absolute',
-				zIndex: '9999',
+				zIndex: '99999',
 				zoom:'1',
 				//filter:'alpha(opacity=50)',
 				opacity:0.5,

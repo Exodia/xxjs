@@ -92,7 +92,7 @@ void function($){
 				$elem.off({
 					mouseenter : overFn,
 					click : clickFn
-				}).css('cursor', this.$oldCursor);
+				}).css('cursor', $elem.$oldCursor);
 				$left.remove(), $right.remove(), $top.remove(), $bottom.remove();
 				$left = $right = $top = $bottom = null;
 				enabled = false;

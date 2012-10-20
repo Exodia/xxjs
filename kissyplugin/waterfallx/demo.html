@@ -2,78 +2,40 @@
 <html>
 <head>
     <title></title>
-    <script src="http://a.tbcdn.cn/??s/kissy/1.2.0/kissy-min.js"></script>
-    <script type="text/javascript" src="waterfallx.js"></script>
+    <script src="http://a.tbcdn.cn/??s/kissy/1.2.0/kissy.js" charset="gbk"></script>
+    
+    <script type="text/javascript" src="demo.js"></script>
     <style type="text/css">
         #container {
             width: 960px;
             padding: 20px;
-            margin: 0 auto;
+            margin: 0 auto;           
 
         }
-        .ks-waterfall-col {
-            display: inline-block;
-            width: 220px;
-            margin-right: 5px;
-            border-right: 2px solid #008000;
-            vertical-align: top;
-            *display: inline;
+       /* .ks-waterfall-col {                  
+            *display: inline !important;
             *zoom: 1;
-        }
+      }*/
 
         .result-item {
             border: 1px solid red;
-            margin:5px 5px 0 0;
+            margin-top:5px;
+            overflow:hidden;
 
         }
     </style>
 </head>
 <body>
 <div id="container">
-    <div class="ks-waterfall-col">
-        <div class="result-item ks-waterfall">
-            <div class="result-item-wrap">
-                <img src="http://img03.taobaocdn.com/imgextra/i3/T1EWN8XhpFXXaMJss8_100011.jpg_210x1000.jpg" alt="" width="210" height="210" />
-            </div>
-        </div>
-        <div class="result-item ks-waterfall">
-            <div class="result-item-wrap">
-                <img src="http://img03.taobaocdn.com/imgextra/i3/T1EWN8XhpFXXaMJss8_100011.jpg_210x1000.jpg" alt="" width="210" height="210" />
-            </div>
-        </div>
-        <div class="result-item ks-waterfall">
-            <div class="result-item-wrap">
-                <img src="http://img03.taobaocdn.com/imgextra/i3/T1EWN8XhpFXXaMJss8_100011.jpg_210x1000.jpg" alt="" width="210" height="310" />
-            </div>
-        </div>
-    </div>
-    <div class="ks-waterfall-col">
-        <div class="result-item ks-waterfall">
-            <div class="result-item-wrap">
-                <img src="http://img03.taobaocdn.com/imgextra/i3/T1EWN8XhpFXXaMJss8_100011.jpg_210x1000.jpg" alt="" width="210" height="210" />
-            </div>
-        </div>
-        <div class="result-item ks-waterfall">
-            <div class="result-item-wrap">
-                <img src="http://img03.taobaocdn.com/imgextra/i3/T1EWN8XhpFXXaMJss8_100011.jpg_210x1000.jpg" alt="" width="210" height="210" />
-            </div>
-        </div>
-    </div>
-    <div class="ks-waterfall-col">
-
-        <div class="result-item ks-waterfall">
-            <div class="result-item-wrap">
-                <img src="http://img03.taobaocdn.com/imgextra/i3/T1EWN8XhpFXXaMJss8_100011.jpg_210x1000.jpg" alt="" width="210" height="410" />
-            </div>
-        </div>
-    </div>
-    <div class="ks-waterfall-col">
-        <div class="result-item ks-waterfall">
-            <div class="result-item-wrap">
-                <img src="http://img03.taobaocdn.com/imgextra/i3/T1EWN8XhpFXXaMJss8_100011.jpg_210x1000.jpg" alt="" width="210" height="210" />
-            </div>
-        </div>
-    </div>
+    
 </div>
+
+<script type="tpl" id="tpl">
+	<div class="result-item ks-waterfall">
+        <div class="result-item-wrap">
+           <img src="http://img03.taobaocdn.com/imgextra/i3/T1EWN8XhpFXXaMJss8_100011.jpg_210x1000.jpg" />
+        </div>
+     </div>
+</script>
 </body>
 </html>

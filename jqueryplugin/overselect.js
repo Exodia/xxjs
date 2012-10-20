@@ -49,7 +49,7 @@ void function($){
 				if(!$left) {
 					$left = $("<div>").css({
 						position : 'absolute',
-						zIndex : 9999,
+						zIndex : 99999,
 						left : '-5000px',
 						width : '0',
 						height : '0',

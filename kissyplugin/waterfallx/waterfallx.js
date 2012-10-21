@@ -229,7 +229,7 @@ KISSY.add('waterfallx', function(S) {
     	},
     	
     	destroy: function() {
-    		
+    		$(win).detach("resize", this.__onResize);
     	},
     	
     	isAdjusting:  function() {

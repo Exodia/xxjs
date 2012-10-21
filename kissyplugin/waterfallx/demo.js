@@ -2,7 +2,7 @@ KISSY.ready(function(S){
 	var tpl = S.get('#tpl').innerHTML;
 	var items = [];
 	for(var i = 0; i < 22; ++i) {
-			items.push(S.all(tpl).height(parseInt( 230 + Math.random()*60)));
+			items.push(S.all(tpl));
 	}
 	
 	S.config({
@@ -16,9 +16,16 @@ KISSY.ready(function(S){
 	
 	S.use('waterfallx', function(S, WaterFall){
 		wf = new WaterFall('#container',{
-			colWidth:235
+			colWidth:230
 		});
 		
 		wf.addItems(items);
+		function resize() {
+			S.each(items, function(v){
+			v.height(parseInt( 230 + Math.random()*60));
+		})
+		}
+		
+		setTimeout(resize, 5000)
 	});
 });

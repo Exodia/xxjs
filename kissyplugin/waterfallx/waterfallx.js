@@ -44,7 +44,7 @@ KISSY.add('waterfallx', function(S) {
             item = $(itemRaw),     
             align = self.config.align,   
             colItems = self._colItems,
-            curColHeights = self._curColHeights,
+        //    curColHeights = self._curColHeights,
             container = self.container,
             curColCount = colItems.length,
             guard = Number.MAX_VALUE,
@@ -55,8 +55,9 @@ KISSY.add('waterfallx', function(S) {
         }
             // 否则找到最短的列
         for (var i = 0; i < curColCount; i++) {
-             if (curColHeights[i] < guard) {          
-                  guard = curColHeights[i];             
+        	var height = colItems[i].outerHeight(true);
+             if ( height < guard) {          
+                  guard = height;             
                   col = i;               
               }
         }
@@ -75,7 +76,7 @@ KISSY.add('waterfallx', function(S) {
         }
 
         // 加入到 dom 树才能取得高度
-        curColHeights[col] += item.outerHeight(true);
+     //   curColHeights[col] += item.outerHeight(true);
         item.attr("data-waterfall-col", col);
 
         return item;
@@ -116,7 +117,7 @@ KISSY.add('waterfallx', function(S) {
         this.container = $(container); 
    //     this._items = $('.ks-waterfall');
         this._colItems = [];   
-        this._curColHeights = [];   
+  //      this._curColHeights = [];   
 		this._init();
     };
     
@@ -124,7 +125,8 @@ KISSY.add('waterfallx', function(S) {
     	_init: function() {
     		D.addStyleSheet(STYLE, 'ks-waterfallx');
     		this._createColumnItems();
-    		this.adjust();
+    		this.addItems(this.container.all(".ks-waterfall"));
+    	//	this.adjust();
     	},
     	/*
     	 *重新计算列数
@@ -134,27 +136,29 @@ KISSY.add('waterfallx', function(S) {
         		container = this.container,
             	containerWidth = container.width(),
             	colItems = this._colItems,
-            	items = this._items,
-    			curColHeights = this._curColHeights;
+            	colCount;
+           // 	items = this._items,
+    		//	curColHeights = this._curColHeights;
         
 			// 当前列数
 			conf.colWidth || (conf.colWidth = containerWidth);
-			curColHeights.length = Math.max(parseInt(containerWidth / conf.colWidth), conf.minColCount);
+			//curColHeights.length = Math.max(parseInt(containerWidth / conf.colWidth), conf.minColCount);
+			colCount = Math.max(parseInt(containerWidth / conf.colWidth), conf.minColCount);
 			// 当前容器宽度
 	/*		this._containerRegion = {
 				width : containerWidth
 			};*/
 			
 			//删除多余的列
-			for(var i = curColHeights.length, len = colItems.length; i < len; ++i) {
+			for(var i = colCount, len = colItems.length; i < len; ++i) {
 				colItems[i].remove();
 				colItems[i] = null;
 			}
 			
-			S.each(curColHeights, function(v, i){
+		/*	S.each(curColHeights, function(v, i){
 				curColHeights[i] = 0;
-			});
-			colItems.length = curColHeights.length;	
+			});*/
+			colItems.length = colCount;	
     	},
     	
     	_createColumnItems: function() {
@@ -163,19 +167,20 @@ KISSY.add('waterfallx', function(S) {
     		var conf = this.config,
     			align = conf.align,
     			colItems = this._colItems,
-    			curColHeights = this._curColHeights,
-    			colCount = curColHeights.length,
+    			//curColHeights = this._curColHeights,
+    			colCount = colItems.length,
     			containerWidth = this.container.width();
     			
         	var margin = align === 'left' ? 0 : Math.max(containerWidth - colCount * conf.colWidth, 0);
+           	margin /= colCount;
            	 	
         	if (align === 'center') {
             	margin /= 2;
         	}
-              	
+         	
         	for(var i = 0; i < colCount; ++i) {
         		colItems[i] || (colItems[i] = $('<div>').addClass(COLCLASS).appendTo(this.container));
-        		colItems[i].css('marginLeft', margin);
+        		colItems[i].width(conf.colWidth).css('marginLeft', margin);
         	}		  		
     	}
     };
@@ -215,7 +220,7 @@ KISSY.add('waterfallx', function(S) {
 					callback && callback.call(self);
 				}
 			});
-			self._curColHeights[col] -= item.outerHeight(true);
+	//		self._curColHeights[col] -= item.outerHeight(true);
 			if (effect) {
 				item.animate({ height : 0 }, effect.duration, effect.easing, cfg.callback);
 			} else {
@@ -233,21 +238,45 @@ KISSY.add('waterfallx', function(S) {
     	adjust:  function(callback) {
     		 S.log("waterfall:adjust");
                 var self = this,
-                    items = self.container.all(".ks-waterfall");
+                	itemSort = [],
+                	colItems = this._colItems,
+                	colCount = colItems.length,
+                	items = new Array(colCount),
+                	i, j, max;
+                
+                for(i = 0; i < colCount; ++i) {
+                	items[i] = colItems[i].all(".ks-waterfall");
+                	if(!max || max < items[i].length) {
+                		//找到最长列数
+                		max = items[i].length;
+                	}
+                }
+                            
+                 //  items = self.container.all(".ks-waterfall");
                 /* 正在加，直接开始这次调整，剩余的加和正在调整的一起处理 */
                 /* 正在调整中，取消上次调整，开始这次调整 */
                 if (self.isAdjusting()) {
                     self._adjuster.stop();
                     self._adjuster = 0;
                 }
+                
+                //横竖交换
+                for(i = 0; i < max; ++i) {
+                	for(j = 0; j < colCount; ++j) {
+                		items[j][i] && itemSort.push(items[j][i]);
+                	}                          	
+                }
+               
+                for(i = 0; i < colCount; ++i) {
+                	items[i].remove();
+                }
                 /*计算容器宽度等信息*/
-                self._recalculate();     
-
-                return self._adjuster = timedChunk(items, addItem, self, function() {
+                self._recalculate();     				
+                return self._adjuster = timedChunk(itemSort, addItem, self, function() {
                 	 self._adjuster = 0;
                      callback && callback.call(self);
                      self.fire('adjustComplete', {
-                         items:items
+                         items:$(itemSort)
                      });
                 });
     	},

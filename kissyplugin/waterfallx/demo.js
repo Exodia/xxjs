@@ -1,9 +1,12 @@
 KISSY.ready(function(S){
 	var tpl = S.get('#tpl').innerHTML;
 	var items = [];
-	for(var i = 0; i < 22; ++i) {
-			items.push(S.all(tpl));
+	var ctn = S.all('#container')
+	for(var i = 0; i < 15; ++i) {		
+		items.push(S.all(tpl));						
 	}
+	
+	
 	
 	S.config({
 			debug : true,
@@ -28,4 +31,4 @@ KISSY.ready(function(S){
 		
 		setTimeout(resize, 5000)
 	});
-});
+})

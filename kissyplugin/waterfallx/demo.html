@@ -5,19 +5,22 @@
     <title></title>
     <script src="http://a.tbcdn.cn/??s/kissy/1.2.0/kissy.js" charset="gbk"></script>
     
-    <script type="text/javascript" src="demo.js"></script>
+   <script type="text/javascript" src="demo.js"></script>
     <style type="text/css">
+    	body {
+    		overflow-y:scroll;
+    	}
         #container {
             width: 90%;    
             margin:0 auto;  
+            position:absolute;
                        		
         }
         
-        .ks-waterfall-col {
-        	border-right: 1px solid green;
+        .ks-waterfall-col{ 
+        	background:#cad5eb;
         }
-        .result-item {
-            border: 1px solid red;
+        .result-item {          
             width:210px;
             margin-top:5px;
             overflow:hidden;
@@ -27,7 +30,6 @@
 </head>
 <body>
 <div id="container">
-    
 </div>
 
 <script type="tpl" id="tpl">

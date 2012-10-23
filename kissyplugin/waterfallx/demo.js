@@ -8,16 +8,16 @@ KISSY.ready(function(S){
 	
 	
 	
-	/*S.config({
+	S.config({
 			debug : true,
 			packages : [{
 				name:'',
 				
 				path : "./"
 			}]
-	});*/
+	});
 	
-	S.use('waterfall', function(S, WaterFall){
+	S.use('waterfallx', function(S, WaterFall){
 		wf = new WaterFall({
 			colWidth:230,
 			container: '#container'

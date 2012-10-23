@@ -110,8 +110,8 @@ KISSY.add('waterfallx', function(S) {
         this.adjust();
     }
     
-    function WaterFallX(container, config) {
-    	if(!container) {
+    function WaterFallX(config) {
+    	if(!config.container) {
     		return;
     	}
     	
@@ -125,7 +125,7 @@ KISSY.add('waterfallx', function(S) {
         };
 
         this.config = S.merge(defaultConfig, config);
-        this.container = $(container); 
+        this.container = $(config.container); 
         this._colItems = [];   
 		this._init();
     };
@@ -172,15 +172,15 @@ KISSY.add('waterfallx', function(S) {
     			colCount = colItems.length,
     			containerWidth = this.container.width();
     			
-        	var margin = align === 'left' ? 0 : Math.max(containerWidth - colCount * conf.colWidth, 0);
+      /*  	var margin = align === 'left' ? 0 : Math.max(containerWidth - colCount * conf.colWidth, 0);
            	margin /= colCount;
         	if (align === 'center') {
             	margin /= 2;
-        	}
+        	}*/
         
         	for(var i = 0; i < colCount; ++i) {
         		colItems[i] || (colItems[i] = $('<div>').addClass(COLCLASS).appendTo(this.container));     		
-        		colItems[i].width(conf.colWidth).css('marginLeft', margin);
+        	//	colItems[i].width(conf.colWidth).css('marginLeft', margin);
         	}		  		
     	},
     	
@@ -213,6 +213,7 @@ KISSY.add('waterfallx', function(S) {
                     self,
                     function () {
                         self._adder = 0;
+                        self._adjustMargin();
                         callback && callback.call(self);                     
                         self.fire('addComplete', {
                             items:items
@@ -292,16 +293,21 @@ KISSY.add('waterfallx', function(S) {
                 /*重新计算列*/
                 self._createColumnItems();
                 
-                function adjustCallback() {
-                	self._adjuster = 0;
-                     callback && callback.call(self);          
-                     self.fire('adjustComplete', {
-                         items:itemSort
-                     });
+                var num = itemSort.length;
+                function check() {
+                	--num;
+                	if( num <= 0) {               		
+                		self._adjuster = 0;
+                		self._adjustMargin();
+                    	callback && callback.call(self);          
+                    	self.fire('adjustComplete', {
+                        	items:itemSort
+                    	});
+                	}
                 }
                      
                 return self._adjuster = timedChunk(itemSort, function(item){
-                	 adjustItemAction(self, false, item, adjustCallback);
+                	 adjustItemAction(self, false, item, check);
                 });			            
     	},
     	adjustItem: function(item) {

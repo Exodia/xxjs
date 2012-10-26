@@ -1,35 +1,29 @@
-KISSY.ready(function(S){
+KISSY.ready(function(S) {
 	var tpl = S.get('#tpl').innerHTML;
 	var items = [];
 	var ctn = S.all('#container')
-	for(var i = 0; i < 15; ++i) {		
-		items.push(S.all(tpl));						
+	for (var i = 0; i < 15; ++i) {
+		items.push(S.all(tpl));
 	}
-	
-	
-	
-	S.config({
-			debug : true,
-			packages : [{
-				name:'',
-				
-				path : "./"
-			}]
-	});
-	
-	S.use('waterfallx', function(S, WaterFall){
-		wf = new WaterFall({
-			colWidth:230,
-			container: '#container'
+
+	S.use('waterfallx, template', function(S, WaterFall, Template) {
+		var nextPage = 0;
+		wf = new WaterFall.Loader({
+			colWidth : 250,
+			container : '#container',
+			load : function(success, end) {
+				S.io.get('data.json', {nextPage:nextPage}, function(data) {
+					var items = [];
+					S.each(data.items, function(item) {
+						//随机高度
+						item.height = parseInt(250 + Math.random() * 60)
+						items.push(S.all(Template(tpl).render(item)));
+					});
+					success(items);
+					(++nextPage > data.total) && end();
+					console.log('nextPage', nextPage)
+				})		
+			}
 		});
-		
-		wf.addItems(items);
-		function resize() {
-			S.each(items, function(v){
-			v.height(parseInt( 230 + Math.random()*60));
-		})
-		}
-		
-		setTimeout(resize, 5000)
 	});
 })

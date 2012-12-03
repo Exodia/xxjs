@@ -18,6 +18,8 @@
         
         img {
         	margin-top: 20px;
+
+
         }
         
         .result-item {          
@@ -40,11 +42,14 @@
 </div>
 
 <script type="tpl" id="tpl">
-	<div class="result-item ks-waterfall" style= "height:{{height}}px">
+    <div class="result-item ks-waterfall">
         <div class="result-item-wrap">
-           <img src="http://img03.taobaocdn.com/imgextra/i3/T1EWN8XhpFXXaMJss8_100011.jpg_210x1000.jpg" />
+            <div class="item-pic">
+                <a href="{{titleUrl}}" target="_blank" title="{{title}}">
+                    <img src="{{picUrl}}" class="J_WaterfallImg"  width="210" />
+                </a>
         </div>
-     </div>
+    </div>
 </script>
 </body>
 </html>

@@ -266,41 +266,42 @@ KISSY.add('waterfallx/base', function(S) {
                 	itemSort = [],
                 	colItems = this._colItems,
                 	colCount = colItems.length,
-                	items = new Array(colCount),
+                    items = this.container.all('.ks-waterfall'),
+                //	items = new Array(colCount),
                 	i, j, max;
                 
                  if (self.isAdjusting()) {
                     self._adjuster.stop();
                     self._adjuster = 0;
                  }
-                
-                for(i = 0; i < colCount; ++i) {
-                	items[i] = colItems[i].all(".ks-waterfall");
-                	if(!max || max < items[i].length) {
+
+        /*        for(i = 0; i < colCount; ++i) {
+                	//items[i] = colItems[i].all(".ks-waterfall");
+                	if(!max || max < colItems[i].clientHeight) {
                 		//找到最长列数
-                		max = items[i].length;
+                		max = i;
                 	}
-                }
+                }*/
                             
                 /* 正在加，直接开始这次调整，剩余的加和正在调整的一起处理 */
                 /* 正在调整中，取消上次调整，开始这次调整 */
                
                 
                 //横竖交换
-                for(i = 0; i < max; ++i) {
+             /*   for(i = 0; i < max; ++i) {
                 	for(j = 0; j < colCount; ++j) {
                 		items[j][i] && itemSort.push($(items[j][i]));
                 	}                          	
-                }
+                }*/
                
                	 /*重新计算列*/
                 self._createColumnItems();
-                
+                colCount = colItems.length;
                 for(i = 0; i < colCount; ++i) {
-                	items[i].remove();
+                //    colItems[i].remove();
                 }     
                 
-                var num = itemSort.length;
+                var num = items.length;
                 function check() {
                 	--num;
                 	if( num <= 0) {               		
@@ -308,12 +309,12 @@ KISSY.add('waterfallx/base', function(S) {
                 //		self._adjustMargin();
                     	callback && callback.call(self);          
                     	self.fire('adjustComplete', {
-                        	items:itemSort
+                        	items:items
                     	});
                 	}
                 }
                      
-                return self._adjuster = timedChunk(itemSort, function(item){
+                return self._adjuster = timedChunk(items, function(item){
                 	 adjustItemAction(self, false, item, check);
                 });			            
     	},

@@ -1,4 +1,4 @@
-KISSY.add("waterfall/loader", function (S, Node, Waterfall) {
+KISSY.add("waterfallx/loader", function (S, Node, Waterfall) {
 
     var $ = Node.all,
         win = S.Env.host || window,
@@ -12,7 +12,7 @@ KISSY.add("waterfall/loader", function (S, Node, Waterfall) {
     function doScroll() {
         var self = this;
         S.log("waterfall:doScroll");
-        if (self.__loading) {
+        if (self.__loading || !self.__started) {
             return;
         }
         // 如果正在调整中，等会再看
@@ -22,16 +22,12 @@ KISSY.add("waterfall/loader", function (S, Node, Waterfall) {
             self.__onScroll();
             return;
         }
-        var container = self.container,
-            colItems = self._colItems,
+        var colItems = self._colItems,
             diff = self.diff;         
-        // 找到最小列高度
-        if (curColHeights.length) {
-            colHeight += Math.min.apply(Math, curColHeights);
-        }
+       
         // 动态载
         // 最小高度(或被用户看到了)低于预加载线
-        if (diff + $(win).scrollTop() + $(win).height() > colHeight) {
+        if (diff + $(win).scrollTop() + $(win).height() > self.container.outerHeight(true)) {
             S.log("waterfall:loading");
             loadData.call(self);
         }
@@ -39,11 +35,11 @@ KISSY.add("waterfall/loader", function (S, Node, Waterfall) {
 
     function loadData() {
         var self = this,
-            container = self.get("container");
+            container = self.container;
 
         self.__loading = 1;
 
-        var load = self.get("load");
+        var load = self.config.load;
 
         load && load(success, end);
 
@@ -88,6 +84,7 @@ KISSY.add("waterfall/loader", function (S, Node, Waterfall) {
              */
             end:function () {
                 $(win).detach("scroll", this.__onScroll);
+                self.__started = 0;
             },
 
             /**

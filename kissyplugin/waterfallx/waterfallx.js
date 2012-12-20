@@ -42,12 +42,11 @@ KISSY.add('waterfallx/base', function(S) {
         return stopper;
     }
     
-    function adjustItemAction(self, add, itemRaw, callback) {
+    function addItem(itemRaw, callback) {
+        var self = this;
         var effect = self.config.effect,
-            item = $(itemRaw),     
-            align = self.config.align,   
+            item = $(itemRaw),
             colItems = self._colItems,
-            container = self.container,
             curColCount = colItems.length,
             guard = Number.MAX_VALUE,
             col = 0;
@@ -68,40 +67,23 @@ KISSY.add('waterfallx/base', function(S) {
          	不在容器里，就加上
          */
        
-		if (add && effect && effect.effect) {
-			// 初始需要动画，那么先把透明度换成 0
-			// has layout to allow to compute height
-			item.css("visibility", "hidden");
-		}
-		
-		colItems[col].append(item);
-		callback && callback();
-
-        // 加入到 dom 树才能取得高度
-     //   curColHeights[col] += item.outerHeight(true);
-        item.attr("data-waterfall-col", col);
-
-        return item;
-    }
-    
-    function addItem(itemRaw) {
-        var self = this,
-            item = adjustItemAction(self, true, itemRaw),
-            effect = self.config.effect;
-        // then animate
-        if (effect && effect.effect) {
-            // 先隐藏才能调用 fadeIn slideDown
+		if (effect && effect.effect) {
+            colItems[col].append(item);
             item.hide();
-            item.css("visibility", "");
+            callback && callback();
             item[effect.effect](
                 effect.duration,
                 0,
                 effect.easing
             );
+		} else {
+            colItems[col].append(item);
+            callback && callback();
         }
+        return item;
     }
-    
-     function doResize() {
+
+    function doResize() {
         var containerRegion = this._containerRegion;
         // 宽度没变就没必要调整
         if (containerRegion && this.container.width() === containerRegion) {
@@ -263,12 +245,12 @@ KISSY.add('waterfallx/base', function(S) {
     	adjust:  function(callback) {
     		 S.log("waterfall:adjust");
                 var self = this,
-                	itemSort = [],
                 	colItems = this._colItems,
-                	colCount = colItems.length,
+                    colCount,
                     items = this.container.all('.ks-waterfall'),
+                    itemSort = [],
                 //	items = new Array(colCount),
-                	i, j, max;
+                	i;
                 
                  if (self.isAdjusting()) {
                     self._adjuster.stop();
@@ -315,7 +297,7 @@ KISSY.add('waterfallx/base', function(S) {
                 }
                      
                 return self._adjuster = timedChunk(items, function(item){
-                	 adjustItemAction(self, false, item, check);
+                	 adjustItemAction(self, item, check);
                 });			            
     	},
     	adjustItem: function(item) {

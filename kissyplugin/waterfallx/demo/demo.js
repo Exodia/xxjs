@@ -17,7 +17,7 @@ KISSY.ready(function(S) {
 	S.use('waterfallx, template', function(S, WaterFall, Template) {
 		var nextPage = 0;
 		wf = new WaterFall.Loader({
-			colWidth : 250,
+			colWidth : 290,
             diff:200,
 			container : '#container',
 			load : function(success, end) {

@@ -121,13 +121,12 @@ KISSY.add('waterfallx/base', function(S) {
             $(win).on("resize", this.__onResize);
         },
         /*
-         *重新计算列数
+         *计算列数
          * */
         _calculate: function() {
             var conf = this.config,
                 container = this.container,
                 containerWidth = container.width(),
-            //   	colItems = this._colItems,
                 colCount;
 
             // 当前列数
@@ -137,22 +136,21 @@ KISSY.add('waterfallx/base', function(S) {
             this._containerRegion = containerWidth;
 
             return colCount;
-            //colItems.length = colCount;
         },
 
         _createColumnItems: function() {
             var conf = this.config,
-                align = conf.align,
+//    			align = conf.align,
                 colItems = this._colItems,
-                colCount = this._calculate(),
-                containerWidth = this.container.width();
+                colCount = this._calculate();
+//    			containerWidth = this.container.width();
 
 
 
-            var margin = align === 'left' ? 0 : Math.max(containerWidth - colCount * conf.colWidth, 0);
-            if (align === 'center') {
-                margin /= 2;
-            }
+            /*	var margin = align === 'left' ? 0 : Math.max(containerWidth - colCount * conf.colWidth, 0);
+             if (align === 'center') {
+             margin /= 2;
+             }*/
 
             //删除多余的列
             for(var i = colCount, len = colItems.length; i < len; ++i) {
@@ -161,12 +159,15 @@ KISSY.add('waterfallx/base', function(S) {
             }
             colItems.length = colCount;
 
+            //添加列
             for(var i = 0; i < colCount; ++i) {
                 colItems[i] || (colItems[i] = $('<div>').addClass(COLCLASS).appendTo(this.container));
                 colItems[i].width(conf.colWidth);
             }
 
-            colItems[0].css('marginLeft', margin + 'px');
+            //调整间距
+            this._adjustMargin();
+//            colItems[0].css('marginLeft', margin + 'px');
 
         },
 
@@ -174,18 +175,15 @@ KISSY.add('waterfallx/base', function(S) {
             var conf = this.config,
                 align = conf.align,
                 colItems = this._colItems,
-                colCount = colItems.length,
-                containerWidth = this.container.width();
+                colCount = colItems.length;
 
-            var margin = align === 'left' ? 0 : Math.max(containerWidth - colCount * conf.colWidth, 0);
+            var margin = align === 'left' ? 0 : Math.max(this.container.width() - colCount * conf.colWidth, 0);
             margin /= colCount;
             if (align === 'center') {
                 margin /= 2;
             }
 
-            for(var i = 0; i < colCount; ++i) {
-                colItems[i].width(conf.colWidth).css('marginLeft', margin);
-            }
+            colItems[0].css('marginLeft', margin + 'px');
         }
     };
 

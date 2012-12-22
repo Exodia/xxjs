@@ -1,4 +1,4 @@
-KISSY.add('waterfallx/base', function(S) {
+KISSY.add('waterfallx/base', function (S) {
     var $ = S.Node.all,
         D = S.DOM,
         win = S.Env.host || window,
@@ -33,31 +33,28 @@ KISSY.add('waterfallx/base', function(S) {
             if (timer) {
                 clearTimeout(timer);
                 todo = [];
-                items.each(function (item) {
-                    item.stop();
-                });
             }
         };
 
         return stopper;
     }
 
-    function addItem(itemRaw, callback) {
+    function addItem(itemRaw, callback, isAdjust) {
         var self = this;
         var effect = self.config.effect,
+            items = this._items,
             item = $(itemRaw),
             colItems = self._colItems,
             curColCount = colItems.length,
             guard = Number.MAX_VALUE,
             col = 0;
 
-        if (!curColCount) {
-            return;
-        }
+        !isAdjust && item.attr('data-waterfall-index', items.length) && (items.push(item));
+
         // 否则找到最短的列
         for (var i = 0; i < curColCount; i++) {
             var height = colItems[i].outerHeight(true);
-            if ( height < guard) {
+            if (height < guard) {
                 guard = height;
                 col = i;
             }
@@ -93,14 +90,14 @@ KISSY.add('waterfallx/base', function(S) {
     }
 
     function WaterFallX(config) {
-        if(!config.container) {
+        if (!config.container) {
             return;
         }
 
         var defaultConfig = {
-            align: 'center',
-            minColCount: 1,
-            effect: {
+            align:'center',
+            minColCount:1,
+            effect:{
                 effect:"fadeIn",
                 duration:1
             }
@@ -109,11 +106,12 @@ KISSY.add('waterfallx/base', function(S) {
         this.config = S.merge(defaultConfig, config);
         this.container = $(config.container).css('whiteSpace', 'nowrap');
         this._colItems = [];
+        this._items = [];
         this._init();
     }
 
     var privatePro = {
-        _init: function() {
+        _init:function () {
             D.addStyleSheet(STYLE, 'ks-waterfallx');
             this._createColumnItems();
             this.addItems(this.container.all(".ks-waterfall"));
@@ -123,7 +121,7 @@ KISSY.add('waterfallx/base', function(S) {
         /*
          *计算列数
          * */
-        _calculate: function() {
+        _calculate:function () {
             var conf = this.config,
                 container = this.container,
                 containerWidth = container.width(),
@@ -138,40 +136,30 @@ KISSY.add('waterfallx/base', function(S) {
             return colCount;
         },
 
-        _createColumnItems: function() {
+        _createColumnItems:function () {
             var conf = this.config,
-//    			align = conf.align,
                 colItems = this._colItems,
                 colCount = this._calculate();
-//    			containerWidth = this.container.width();
 
-
-
-            /*	var margin = align === 'left' ? 0 : Math.max(containerWidth - colCount * conf.colWidth, 0);
-             if (align === 'center') {
-             margin /= 2;
-             }*/
-
-            //删除多余的列
-            for(var i = colCount, len = colItems.length; i < len; ++i) {
+            //删除原有的列
+            for (var i = colItems.length - 1; i > -1; --i) {
                 colItems[i].remove();
-                colItems[i] = null;
             }
+
             colItems.length = colCount;
 
             //添加列
-            for(var i = 0; i < colCount; ++i) {
-                colItems[i] || (colItems[i] = $('<div>').addClass(COLCLASS).appendTo(this.container));
+            for (i = 0; i < colCount; ++i) {
+                colItems[i] = $('<div>').addClass(COLCLASS).appendTo(this.container);
+//                colItems[i] || (colItems[i] = $('<div>').addClass(COLCLASS).appendTo(this.container));
                 colItems[i].width(conf.colWidth);
             }
 
             //调整间距
             this._adjustMargin();
-//            colItems[0].css('marginLeft', margin + 'px');
-
         },
 
-        _adjustMargin: function() {
+        _adjustMargin:function () {
             var conf = this.config,
                 align = conf.align,
                 colItems = this._colItems,
@@ -188,7 +176,7 @@ KISSY.add('waterfallx/base', function(S) {
     };
 
     var pulbicPro = {
-        addItems: function(items, callback) {
+        addItems:function (items, callback) {
             var self = this;
             /* 正在调整中，直接这次加，和调整的节点一起处理 */
             /* 正在加，直接这次加，一起处理 */
@@ -197,92 +185,74 @@ KISSY.add('waterfallx/base', function(S) {
                 self,
                 function () {
                     self._adder = 0;
-                    //     self._adjustMargin();
                     callback && callback.call(self);
                     self.fire('addComplete', {
                         items:items
                     });
                 });
 
+//            Array.prototype.push.apply(self._items, items);
             return self._adder;
         },
 
-        isAdding: function() {
+        isAdding:function () {
             return !!this._adder;
         },
 
-        removeItem: function(item, cfg) {
+        removeItem:function (item, cfg) {
             cfg = cfg || {};
             var effect = cfg.effect,
                 callback = cfg.callback,
                 self = this,
                 col = item.attr('data-waterfall-col');
             S.mix(cfg, {
-                callback: function() {
+                callback:function () {
                     item.remove();
                     callback && callback.call(self);
                 }
             });
 
             if (effect) {
-                item.animate({ height : 0 }, effect.duration, effect.easing, cfg.callback);
+                item.animate({ height:0 }, effect.duration, effect.easing, cfg.callback);
             } else {
                 cfg.callback();
             }
         },
 
-        destroy: function() {
+        destroy:function () {
             $(win).detach("resize", this.__onResize);
         },
 
-        isAdjusting:  function() {
+        isAdjusting:function () {
             return !!this._adjuster;
         },
-        adjust:  function(callback) {
+        adjust:function (callback) {
             S.log("waterfall:adjust");
             var self = this,
                 colItems = this._colItems,
                 colCount,
-                items = this.container.all('.ks-waterfall'),
-                i;
+                items = this._items;
 
+            /* 正在加，直接开始这次调整，剩余的加和正在调整的一起处理 */
+            /* 正在调整中，取消上次调整，开始这次调整 */
             if (self.isAdjusting()) {
                 self._adjuster.stop();
                 self._adjuster = 0;
             }
 
-            /*        for(i = 0; i < colCount; ++i) {
-             //items[i] = colItems[i].all(".ks-waterfall");
-             if(!max || max < colItems[i].clientHeight) {
-             //找到最长列数
-             max = i;
-             }
-             }*/
 
-            /* 正在加，直接开始这次调整，剩余的加和正在调整的一起处理 */
-            /* 正在调整中，取消上次调整，开始这次调整 */
-
-
-            //横竖交换
-            /*   for(i = 0; i < max; ++i) {
-             for(j = 0; j < colCount; ++j) {
-             items[j][i] && itemSort.push($(items[j][i]));
-             }
-             }*/
-
+            for (var i = items.length - 1; i > -1; --i) {
+                $(items[i]).stop(true);
+            }
             //重新计算列
             self._createColumnItems();
-            colCount = colItems.length;
-            for(i = 0; i < colCount; ++i) {
-                //    colItems[i].remove();
-            }
 
             var num = items.length;
+
             function check() {
                 --num;
-                if( num <= 0) {
+                if (num <= 0) {
                     self._adjuster = 0;
-                    //		self._adjustMargin();
                     callback && callback.call(self);
                     self.fire('adjustComplete', {
                         items:items
@@ -290,11 +260,11 @@ KISSY.add('waterfallx/base', function(S) {
                 }
             }
 
-            return self._adjuster = timedChunk(items, function(item){
-                addItem.call(self, item, check);
+            return self._adjuster = timedChunk(items, function (item) {
+                addItem.call(self, item, check, true);
             });
         },
-        adjustItem: function(item) {
+        adjustItem:function (item) {
 
         }
     };

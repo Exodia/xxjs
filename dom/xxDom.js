@@ -1,5 +1,5 @@
 void function(win, undefined) {
-	var XX = {};
+	var XX = win.XX || {};
 	
 	/*获取元素在DOM树中的路径，以“标签名$索引位置>标签名$索引位置“的字符串返回
 	 *参数elem:计算路径的元素

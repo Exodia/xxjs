@@ -1,4 +1,9 @@
 KISSY.ready(function(S) {
+//    window.onerror = function(errorMessage, scriptURL, lineNumber) {
+//        console.log(arguments)
+////        alert(errorMessage, scriptURL, lineNumber)
+//    }
+//    S.getScript('a.js');
 	var tpl = S.get('#tpl').innerHTML;
 	var items = [];
 	var ctn = S.all('#container');
@@ -30,7 +35,10 @@ KISSY.ready(function(S) {
 
 						items.push(S.all(Template(tpl).render(item)));
 					});
-					success(items);
+//					success(items);
+                    var method = nextPage%2 ? 'addItems' : 'preAddItems';
+                    wf[method](items);
+                    wf.__loading = 0;
 					(++nextPage > 6) && end();
 					console.log('nextPage', nextPage)
 				}, 'json')

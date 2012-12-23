@@ -1,12 +1,16 @@
+/*
+ Loader
+ * */
 KISSY.add("waterfallx/loader", function (S, Node, Waterfall) {
 
     var $ = Node.all,
         win = S.Env.host || window,
         SCROLL_TIMER = 50;
 
-    
+
     function Loader() {
         Loader.superclass.constructor.apply(this, arguments);
+        this.config.diff || (this.config.diff = 0);
     }
 
     function doScroll() {
@@ -18,13 +22,13 @@ KISSY.add("waterfallx/loader", function (S, Node, Waterfall) {
         // 如果正在调整中，等会再看
         // 调整中的高度不确定，现在不适合判断是否到了加载新数据的条件
         if (self.isAdjusting()) {
+            console.log(self.isAdjusting())
             // 恰好 __onScroll 是 buffered . :)
             self.__onScroll();
             return;
         }
-        var colItems = self._colItems,
-            diff = self.diff;         
-       
+        var diff = self.config.diff;
+
         // 动态载
         // 最小高度(或被用户看到了)低于预加载线
         if (diff + $(win).scrollTop() + $(win).height() > self.container.outerHeight(true)) {
@@ -34,13 +38,10 @@ KISSY.add("waterfallx/loader", function (S, Node, Waterfall) {
     }
 
     function loadData() {
-        var self = this,
-            container = self.container;
-
+        var self = this;
         self.__loading = 1;
 
         var load = self.config.load;
-
         load && load(success, end);
 
         function success(items, callback) {
@@ -65,7 +66,7 @@ KISSY.add("waterfallx/loader", function (S, Node, Waterfall) {
                 // 初始化时立即检测一次，但是要等初始化 adjust 完成后.
                 self.__onScroll();
                 self.start();
-            },              
+            },
 
             /**
              * Start monitor scroll on window.
@@ -89,7 +90,7 @@ KISSY.add("waterfallx/loader", function (S, Node, Waterfall) {
 
             /**
              * Use end instead.
-             * @deprecated 1.3
+             * @deprecated
              */
             pause:function () {
                 this.end();
@@ -97,7 +98,7 @@ KISSY.add("waterfallx/loader", function (S, Node, Waterfall) {
 
             /**
              * Use start instead.
-             * @deprecated 1.3
+             * @deprecated
              */
             resume:function () {
                 this.start();

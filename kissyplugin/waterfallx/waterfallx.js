@@ -30,29 +30,37 @@ KISSY.add('waterfallx/base', function (S) {
         }
 
         stopper.stop = function () {
-           clearTimeout(timer);
+            clearTimeout(timer);
         };
 
         return stopper;
     }
 
-    function addItem(itemRaw, callback, isAdjust) {
+    function addItem(itemRaw, callback, status) {
         if (!itemRaw) {
             callback && callback();
             return;
         }
 
-        console.log(isAdjust);
+
         var self = this;
         var effect = self.config.effect,
-            items = this._items,
+            items =  this._items,
+            add = 'append',
             item = $(itemRaw),
             colItems = self._colItems,
             curColCount = colItems.length,
             guard = Number.MAX_VALUE,
             col = 0;
 
-       !isAdjust && item.attr('data-waterfall-index', items.length) && (items.push(item));
+        if(!status) {
+            item.attr('data-waterfall-index', items.length) && (items.push(item));
+        } else if(status == 'preadd') {
+            items = this._preItems;
+            add = 'prepend';
+            items.push(item);
+            item.attr('data-waterfall-index', -items.length) ;
+        }
 
         // 否则找到最短的列
         for (var i = 0; i < curColCount; i++) {
@@ -68,7 +76,7 @@ KISSY.add('waterfallx/base', function (S) {
          */
 
         if (effect && effect.effect) {
-            colItems[col].append(item);
+            colItems[col][add](item);
             item.hide();
             callback && callback();
             item[effect.effect](
@@ -90,7 +98,7 @@ KISSY.add('waterfallx/base', function (S) {
             return;
         }
         //列数不变，仅需要调整间距
-        if(this._calculate() === this._colItems.length) {
+        if (this._calculate() === this._colItems.length) {
             this._adjustMargin();
             return;
         }
@@ -114,6 +122,7 @@ KISSY.add('waterfallx/base', function (S) {
         this.config = S.merge(defaultConfig, config);
         this.container = $(config.container).css('whiteSpace', 'nowrap');
         this._colItems = [];
+        this._preItems = [];
         this._items = [];
         this._init();
     }
@@ -179,7 +188,17 @@ KISSY.add('waterfallx/base', function (S) {
             }
 
             colItems[0].css('marginLeft', margin + 'px');
+        },
+        _deleteItem:function (item) {
+            var index = +item.attr('data-waterfall-index');
+            if (index < 0) {
+                index = -(index + 1);
+                this._preItems[index] = null;
+            } else {
+                this._items[index] = null;
+            }
         }
+
     };
 
     var pulbicPro = {
@@ -200,7 +219,25 @@ KISSY.add('waterfallx/base', function (S) {
 
             return self._adder;
         },
+        preAddItems: function(items, callback) {
+            var self = this;
+            /* 正在调整中，直接这次加，和调整的节点一起处理 */
+            /* 正在加，直接这次加，一起处理 */
+            self._adder = timedChunk(items,
+                function(itemRaw){
+                    addItem.call(self, itemRaw, null, 'preadd');
+                },
+                self,
+                function () {
+                    self._adder = 0;
+                    callback && callback.call(self);
+                    self.fire('addComplete', {
+                        items:items
+                    });
+                });
 
+            return self._adder;
+        },
         isAdding:function () {
             return !!this._adder;
         },
@@ -212,14 +249,14 @@ KISSY.add('waterfallx/base', function (S) {
                 callback = cfg.callback,
                 self = this;
 
-            cfg.callback = function() {
-                self._items[item.attr('data-waterfall-index')] = null;
+            cfg.callback = function () {
+                self._deleteItem(item);
                 item.remove();
                 callback && callback.call(self);
             };
 
             if (effect) {
-                item.animate({effect: effect.effect }, effect.duration, effect.easing, cfg.callback);
+                item.animate({effect:effect.effect }, effect.duration, effect.easing, cfg.callback);
             } else {
                 cfg.callback();
             }
@@ -235,7 +272,7 @@ KISSY.add('waterfallx/base', function (S) {
         adjust:function (callback) {
             S.log("waterfall:adjust");
             var self = this,
-                items = this._items;
+                items = this._items = this._preItems.concat(this._items);
 
             /* 正在加，直接开始这次调整，剩余的加和正在调整的一起处理 */
             /* 正在调整中，取消上次调整，开始这次调整 */
@@ -244,9 +281,15 @@ KISSY.add('waterfallx/base', function (S) {
                 self._adjuster = 0;
             }
 
-            for (var i = items.length - 1; i > -1; --i) {
-                //停止动画
-                items[i] && $(items[i]).stop(true);
+            this._preItems = [];
+            for (var i = 0, len = items.length; i < len; ) {
+                //停止动画,去除空洞
+                if(items[i]) {
+                    $(items[i]).stop(true).attr('data-waterfall-index', i++);
+                } else {
+                    items.splice(i, 1);
+                    --len;
+                }
             }
 
             //重置列
@@ -282,7 +325,7 @@ KISSY.add('waterfallx/base', function (S) {
 /*
  Loader
  * */
-KISSY.add("waterfallx/loader", function (S, Node, Waterfall)  {
+KISSY.add("waterfallx/loader", function (S, Node, Waterfall) {
 
     var $ = Node.all,
         win = S.Env.host || window,

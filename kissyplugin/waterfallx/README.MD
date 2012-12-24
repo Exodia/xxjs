@@ -9,4 +9,5 @@
 图片尺寸未知且需要自适应
 线上案例：淘宝周边(http://zhoubian.taoboa.com)
 #其他
-preAddItems的参数与addItems一致
+preAddItems的参数与addItems一致！
+配套的图片自适应组件可见：https://github.com/Exodia/xxjs/util/imageshrink

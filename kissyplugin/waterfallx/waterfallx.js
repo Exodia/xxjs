@@ -120,7 +120,7 @@ KISSY.add('waterfallx/base', function (S) {
         };
 
         this.config = S.merge(defaultConfig, config);
-        this.container = $(config.container).css('whiteSpace', 'nowrap');
+        this.container = $(config.container);//.css('whiteSpace', 'nowrap');
         this._colItems = [];
         this._preItems = [];
         this._items = [];

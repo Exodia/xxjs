@@ -13,5 +13,7 @@
 2. [有图有真相](http://www.taobao.com/go/act/sale/zhenxiang.php)
 
 #其他
-preAddItems的参数与addItems一致！
-配套的图片自适应组件可见：https://github.com/Exodia/xxjs/util/imageshrink
+* 弹性布局(如width:70%)，若出现折行现象，请设置父容器的white-space:nowrap; 主要原因是该瀑布流未采用绝对定位，
+  通过margin来控制布局，会导致百分数的情况下，四舍五入多出1像素的margin，从而导致折行现象！
+* preAddItems的参数与addItems一致！
+* 配套的图片自适应组件可见：https://github.com/Exodia/xxjs/util/imageshrink

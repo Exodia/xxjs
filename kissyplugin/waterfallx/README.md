@@ -8,6 +8,7 @@
 #适用场景
 图片尺寸未知且需要自适应
 线上案例：淘宝周边(http://zhoubian.taobao.com)
+
           有图有真相:http://www.taobao.com/go/act/sale/zhenxiang.php
 #其他
 preAddItems的参数与addItems一致！

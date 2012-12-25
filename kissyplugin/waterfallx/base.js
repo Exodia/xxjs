@@ -44,8 +44,8 @@ KISSY.add('waterfallx/base', function (S) {
 
 
         var self = this;
-        var effect = self.config.effect,
-            items =  this._items,
+        var effect = null,
+            items =  null,
             add = 'append',
             item = $(itemRaw),
             colItems = self._colItems,
@@ -54,12 +54,19 @@ KISSY.add('waterfallx/base', function (S) {
             col = 0;
 
         if(!status) {
+            //尾部添加状态
+            items = this._items;
+            effect = self.config.effect;
             item.attr('data-waterfall-index', items.length) && (items.push(item));
         } else if(status == 'preadd') {
+            //头部添加状态
             items = this._preItems;
             add = 'prepend';
             items.push(item);
             item.attr('data-waterfall-index', -items.length) ;
+        } else {
+            //调整状态
+            effect = self.config.addjustEffect;
         }
 
         // 否则找到最短的列
@@ -120,7 +127,7 @@ KISSY.add('waterfallx/base', function (S) {
         };
 
         this.config = S.merge(defaultConfig, config);
-        this.container = $(config.container).css('whiteSpace', 'nowrap');
+        this.container = $(config.container);//.css('whiteSpace', 'nowrap');
         this._colItems = [];
         this._preItems = [];
         this._items = [];

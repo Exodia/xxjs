@@ -12,7 +12,7 @@ void function(){
 		
 	};
 	if(typeof exports == 'object'){
-		exprots = XX;
+		module.exprots = XX;
 	} else {
 		window.XX = XX;
 	}

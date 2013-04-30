@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+</head>
+<body>
+<script>
+    var fn = function (mql) {
+        var d = document.createElement('p')
+        d.innerHTML = mql.matches
+        document.body.appendChild(d)
+    }
+
+    var mql = window.matchMedia('(min-width: 500px)');
+
+    mql.addListener(fn);
+    mql.addListener(function (mql) {
+        var d = document.createElement('p')
+        d.innerHTML = mql.matches
+        document.body.appendChild(d)
+    });
+    mql.addListener(function (mql) {
+        var d = document.createElement('p')
+        d.innerHTML = mql.matches
+        document.body.appendChild(d)
+    });
+</script>
+</body>
+</html>

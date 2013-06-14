@@ -12,6 +12,8 @@
 线上案例：
 1. [淘宝周边](http://zhoubian.taobao.com)
 2. [有图有真相](http://www.taobao.com/go/act/sale/zhenxiang.php)
+3. [淘宝新版个人主页](http://my.taobao.com/278653972)
+4. [淘宝随便逛逛](http://guang.taobao.com/square/index.htm)
 
 #其他
 * 弹性布局(如width:70%)，若出现折行现象，请设置瀑布流容器的white-space:nowrap; 主要原因是该瀑布流未采用绝对定位，
